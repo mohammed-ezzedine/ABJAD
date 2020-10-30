@@ -12,7 +12,9 @@ statement           →   expr_stmt
                     |   while_stmt
                     |   for_stmt
                     |   return_stmt
-                    |   assignment_stmt ;
+                    |   assignment_stmt 
+                    |   print_stmt 
+                    |   comment_stmt;
 
 declaration         →   FUNC ID OPEN_PAREN parameter_list CLOSE_PAREN block
                     |   CONST ID EQUAL expression SEMICOLON
@@ -21,7 +23,8 @@ declaration         →   FUNC ID OPEN_PAREN parameter_list CLOSE_PAREN block
 
 expr_stmt           →   expression SEMICOLON ;
 
-if_stmt             →   IF OPEN_PAREN expression CLOSE_PAREN block ;
+if_stmt             →   if_clause
+                    |   if_clause else_clause ;
 
 while_stmt          →   WHILE OPEN_PAREN expression CLOSE_PAREN block ;
 
@@ -31,10 +34,18 @@ return_stmt         →   RETURN expression SEMICOLON ;
 
 assignment_stmt     →   ID EQUAL expression SEMICOLON ;
 
+print_stmt          →   PRINT OPEN_PAREN expression CLOSE_PAREN SEMICOLON ;
+
+comment_stmt        →   DOUBLE_SLASH ;
+
 parameter_list      →   primitive_list
                     |   ε ;
 
 block               →   OPEN_BRACE binding_list CLOSE_BRACE ;
+
+if_clause           →   IF OPEN_PAREN expression CLOSE_PAREN block;
+
+else_clause         ->  ELSE block
 
 expression          →   call_expr
                     |   instant_expr
@@ -64,8 +75,7 @@ oper_expr           →   expression PLUS expression
                     |   BANG expression
                     |   MINUS expression ;
 
-primitive           →   INT_CONST
-                    |   FLOAT_CONST
+primitive           →   NUMBER_CONST
                     |   STRING_CONST
                     |   TRUE
                     |   FALSE

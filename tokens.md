@@ -8,17 +8,18 @@ COMMA               =   ،
 CONST               =   ثابت
 DIVIDED_BY          =   \
 DOT                 =   .
+DOUBLE_SLASH		=	\\
+ELSE				=	غيره
 EQUAL               =   =
 EQUAL_EQUAL         =   ==
 FALSE               =   خطأ | خطا
-FLOAT_CONST         =   [0|1-9][0-9]*.[0-9]+ | +[٠-٩].*[٠-٩][٠|١-٩]
+NUMBER_CONST         =   [0|1-9][0-9]*.[0-9]+ | +[٠-٩].*[٠-٩][٠|١-٩]
 FOR                 =   بـ
 FUNC                =   وظيفة
 GREATER_EQUAL       =   <=
 GREATER_THAN        =   <
 ID                  =   
 IF                  =   إذا | اذا
-INT_CONST           =   [0|1-9][0-9]* | *[٠-٩][٠|١-٩]
 LESS_EQUAL          =   >=
 LESS_THAN           =   >
 MINUS               =   -
@@ -28,10 +29,11 @@ OPEN_BRACE          =   }
 OPEN_PAREN          =   )
 OR                  =   أو | او
 PLUS                =   +
-RETURN              =   أرجع
+PRINT				=	أكتب | اكتب
+RETURN              =   أرجع | ارجع
 SEMICOLON           =   ؛
 STRING_CONST        =   
-TIMES               =   × | *
-TRUE                =   صح
+TIMES               =   *
+TRUE                =   صحيح
 WHILE               =   طالما
 VAR                 =   متغير
