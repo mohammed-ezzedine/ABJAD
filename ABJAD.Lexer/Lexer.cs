@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ABJAD.Exceptions;
+using ABJAD.Reader;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -48,7 +49,7 @@ namespace ABJAD.Lexer
 
         public Lexer(string fileName)
         {
-            // TODO assign code to reader.read
+            code = AbjadFile.Read(fileName);
         }
 
         public List<Token> Lex()
@@ -94,7 +95,7 @@ namespace ABJAD.Lexer
         {
             if (!HasNext(out next))
             {
-                //TODO throw new AbjadExpectedTokenNotFoundException(_line, expected.ToString());
+                throw new AbjadExpectedTokenNotFoundException(_line, expected.ToString());
             }
 
             if (next == expected)
@@ -142,7 +143,7 @@ namespace ABJAD.Lexer
                         // check for negative numbers
                         if (!ScanNumber())
                         {
-                            // TODO throw new AbjadUnexpectedTokenException(_line, _lineIndex);
+                            throw new AbjadUnexpectedTokenException(_line, _lineIndex);
                         }
                     }
                     else
@@ -198,7 +199,7 @@ namespace ABJAD.Lexer
                     if (ScanKeyword()) return;
                     if (ScanNumber()) return;
                     if (ScanLiteral()) return;
-                    // TODO throw new AbjadUndefinedTokenException(_line, _lineIndex, c.ToString());
+                    throw new AbjadUndefinedTokenException(_line, _lineIndex, c.ToString());
             }
         }
 

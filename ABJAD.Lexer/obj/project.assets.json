@@ -1,11 +1,49 @@
 {
   "version": 3,
   "targets": {
-    ".NETCoreApp,Version=v3.1": {}
+    ".NETCoreApp,Version=v3.1": {
+      "ABJAD/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v3.1",
+        "compile": {
+          "bin/placeholder/ABJAD.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ABJAD.dll": {}
+        }
+      },
+      "ABJAD.Reader/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v3.1",
+        "dependencies": {
+          "ABJAD": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/ABJAD.Reader.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ABJAD.Reader.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "ABJAD/1.0.0": {
+      "type": "project",
+      "path": "../ABJAD/ABJAD.csproj",
+      "msbuildProject": "../ABJAD/ABJAD.csproj"
+    },
+    "ABJAD.Reader/1.0.0": {
+      "type": "project",
+      "path": "../ABJAD.Reader/ABJAD.Reader.csproj",
+      "msbuildProject": "../ABJAD.Reader/ABJAD.Reader.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    ".NETCoreApp,Version=v3.1": []
+    ".NETCoreApp,Version=v3.1": [
+      "ABJAD >= 1.0.0",
+      "ABJAD.Reader >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\mezdn\\.nuget\\packages\\": {},
@@ -37,7 +75,14 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD.Reader\\ABJAD.Reader.csproj": {
+              "projectPath": "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD.Reader\\ABJAD.Reader.csproj"
+            },
+            "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD\\ABJAD.csproj": {
+              "projectPath": "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD\\ABJAD.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

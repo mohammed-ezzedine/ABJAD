@@ -1,20 +1,21 @@
-﻿using System.IO;
+﻿using ABJAD.Exceptions;
+using System.IO;
 using System.Linq;
 
 namespace ABJAD.Reader
 {
-    public class Reader
+    public class AbjadFile
     {
         public static string Read(string fileName)
         {
             if (!IsAbjadFile(fileName))
             {
-                // TODO: throw new EZInvalidFileException();
+                throw new AbjadInvalidFileExcepion();
             }
 
             if (!File.Exists(fileName))
             {
-                // TODO: throw new EZFileNotFoundException(fileName);
+                throw new FileNotFoundException();
             }
 
             var code = File.ReadAllText(fileName);
