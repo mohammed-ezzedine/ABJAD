@@ -8,9 +8,11 @@ namespace ABJAD.Lexer
 {
     public class Lexer
     {
-        private static readonly string DigitRegex = "[٠-٩]";
-        private static readonly string NumberRegex = @"[٠-٩]*(\.[٠-٩]*)?";
-        private static readonly string LiteralRegex = @"";
+        private static readonly string DigitRegex = "[\u0660-\u0669]";
+        private static readonly string NonZeroDigitRegex = "[\u0661-\u0669]";
+        private static readonly string NumberRegex = $"([\u0660]|{NonZeroDigitRegex}{DigitRegex}*)(\\.{DigitRegex}*)?";
+        private static readonly string LetterRegex = $"[\u0620-\u063A]|[\u0641-\u064A]";
+        private static readonly string LiteralRegex = @$"({LetterRegex})({LetterRegex}|{DigitRegex}|(_))*";
         private static readonly string WordTerminalRegex = @"[();{} !@#$%&*-+=.,/\`~'"":\[\]\?\^]";
 
         private static readonly Dictionary<string, TokenType> Keywords = new Dictionary<string, TokenType>
