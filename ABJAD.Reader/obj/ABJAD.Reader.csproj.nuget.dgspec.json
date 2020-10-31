@@ -4,14 +4,14 @@
     "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD.Reader\\ABJAD.Reader.csproj": {}
   },
   "projects": {
-    "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD.Reader\\ABJAD.Reader.csproj": {
+    "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD.Models\\ABJAD.Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD.Reader\\ABJAD.Reader.csproj",
-        "projectName": "ABJAD.Reader",
-        "projectPath": "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD.Reader\\ABJAD.Reader.csproj",
+        "projectUniqueName": "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD.Models\\ABJAD.Models.csproj",
+        "projectName": "ABJAD.Models",
+        "projectPath": "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD.Models\\ABJAD.Models.csproj",
         "packagesPath": "C:\\Users\\mezdn\\.nuget\\packages\\",
-        "outputPath": "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD.Reader\\obj\\",
+        "outputPath": "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD.Models\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -30,11 +30,7 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
-            "projectReferences": {
-              "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD\\ABJAD.csproj": {
-                "projectPath": "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD\\ABJAD.csproj"
-              }
-            }
+            "projectReferences": {}
           }
         },
         "warningProperties": {
@@ -64,14 +60,14 @@
         }
       }
     },
-    "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD\\ABJAD.csproj": {
+    "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD.Reader\\ABJAD.Reader.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD\\ABJAD.csproj",
-        "projectName": "ABJAD",
-        "projectPath": "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD\\ABJAD.csproj",
+        "projectUniqueName": "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD.Reader\\ABJAD.Reader.csproj",
+        "projectName": "ABJAD.Reader",
+        "projectPath": "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD.Reader\\ABJAD.Reader.csproj",
         "packagesPath": "C:\\Users\\mezdn\\.nuget\\packages\\",
-        "outputPath": "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD\\obj\\",
+        "outputPath": "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD.Reader\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -90,7 +86,11 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
-            "projectReferences": {}
+            "projectReferences": {
+              "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD.Models\\ABJAD.Models.csproj": {
+                "projectPath": "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD.Models\\ABJAD.Models.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

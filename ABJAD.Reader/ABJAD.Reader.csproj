@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ABJAD\ABJAD.csproj" />
+    <ProjectReference Include="..\ABJAD.Models\ABJAD.Models.csproj" />
   </ItemGroup>
 
 </Project>

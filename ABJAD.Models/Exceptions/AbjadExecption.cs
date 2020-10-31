@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ABJAD.Exceptions
+namespace ABJAD.Models.Exceptions
 {
     public class AbjadExecption : Exception
     {

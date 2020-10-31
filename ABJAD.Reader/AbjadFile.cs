@@ -1,4 +1,4 @@
-﻿using ABJAD.Exceptions;
+﻿using ABJAD.Models.Exceptions;
 using System.IO;
 using System.Linq;
 

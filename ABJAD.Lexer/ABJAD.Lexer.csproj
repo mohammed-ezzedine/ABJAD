@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ABJAD.Models\ABJAD.Models.csproj" />
     <ProjectReference Include="..\ABJAD.Reader\ABJAD.Reader.csproj" />
-    <ProjectReference Include="..\ABJAD\ABJAD.csproj" />
   </ItemGroup>
 
 </Project>

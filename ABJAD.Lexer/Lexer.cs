@@ -1,4 +1,4 @@
-﻿using ABJAD.Exceptions;
+﻿using ABJAD.Models.Exceptions;
 using ABJAD.Reader;
 using System.Collections.Generic;
 using System.Text;

@@ -2,28 +2,28 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v3.1": {
-      "ABJAD/1.0.0": {
+      "ABJAD.Models/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
         "compile": {
-          "bin/placeholder/ABJAD.dll": {}
+          "bin/placeholder/ABJAD.Models.dll": {}
         },
         "runtime": {
-          "bin/placeholder/ABJAD.dll": {}
+          "bin/placeholder/ABJAD.Models.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "ABJAD/1.0.0": {
+    "ABJAD.Models/1.0.0": {
       "type": "project",
-      "path": "../ABJAD/ABJAD.csproj",
-      "msbuildProject": "../ABJAD/ABJAD.csproj"
+      "path": "../ABJAD.Models/ABJAD.Models.csproj",
+      "msbuildProject": "../ABJAD.Models/ABJAD.Models.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "ABJAD >= 1.0.0"
+      "ABJAD.Models >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -57,8 +57,8 @@
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
-            "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD\\ABJAD.csproj": {
-              "projectPath": "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD\\ABJAD.csproj"
+            "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD.Models\\ABJAD.Models.csproj": {
+              "projectPath": "D:\\Me\\00. Classes\\00. Programming\\01. C#\\04. Programs\\Abjad\\ABJAD.Models\\ABJAD.Models.csproj"
             }
           }
         }
