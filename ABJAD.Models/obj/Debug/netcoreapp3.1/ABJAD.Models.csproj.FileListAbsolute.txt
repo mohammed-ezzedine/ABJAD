@@ -1,9 +1,0 @@
-D:\Me\00. Classes\00. Programming\01. C#\04. Programs\Abjad\ABJAD.Models\bin\Debug\netcoreapp3.1\ABJAD.Models.deps.json
-D:\Me\00. Classes\00. Programming\01. C#\04. Programs\Abjad\ABJAD.Models\bin\Debug\netcoreapp3.1\ABJAD.Models.dll
-D:\Me\00. Classes\00. Programming\01. C#\04. Programs\Abjad\ABJAD.Models\bin\Debug\netcoreapp3.1\ABJAD.Models.pdb
-D:\Me\00. Classes\00. Programming\01. C#\04. Programs\Abjad\ABJAD.Models\obj\Debug\netcoreapp3.1\ABJAD.Models.csprojAssemblyReference.cache
-D:\Me\00. Classes\00. Programming\01. C#\04. Programs\Abjad\ABJAD.Models\obj\Debug\netcoreapp3.1\ABJAD.Models.AssemblyInfoInputs.cache
-D:\Me\00. Classes\00. Programming\01. C#\04. Programs\Abjad\ABJAD.Models\obj\Debug\netcoreapp3.1\ABJAD.Models.AssemblyInfo.cs
-D:\Me\00. Classes\00. Programming\01. C#\04. Programs\Abjad\ABJAD.Models\obj\Debug\netcoreapp3.1\ABJAD.Models.csproj.CoreCompileInputs.cache
-D:\Me\00. Classes\00. Programming\01. C#\04. Programs\Abjad\ABJAD.Models\obj\Debug\netcoreapp3.1\ABJAD.Models.dll
-D:\Me\00. Classes\00. Programming\01. C#\04. Programs\Abjad\ABJAD.Models\obj\Debug\netcoreapp3.1\ABJAD.Models.pdb
