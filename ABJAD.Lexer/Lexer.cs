@@ -1,5 +1,6 @@
 ﻿using ABJAD.Models.Exceptions;
 using ABJAD.Reader;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -8,12 +9,13 @@ namespace ABJAD.Lexer
 {
     public class Lexer
     {
-        private static readonly string DigitRegex = "[\u0660-\u0669]";
-        private static readonly string NonZeroDigitRegex = "[\u0661-\u0669]";
-        private static readonly string NumberRegex = $"([\u0660]|{NonZeroDigitRegex}{DigitRegex}*)(\\.{DigitRegex}*)?";
+        private static readonly string DigitRegex = "[0-9]";
+        private static readonly string NonZeroDigitRegex = "[1-9]";
+        private static readonly string NumberRegex = @"^(0|[1-9][0-9]*)(\.[0-9]*)?$";
         private static readonly string LetterRegex = $"[\u0620-\u063A]|[\u0641-\u064A]";
         private static readonly string LiteralRegex = @$"({LetterRegex})({LetterRegex}|{DigitRegex}|(_))*";
         private static readonly string WordTerminalRegex = @"[();{} !@#$%&*-+=.,/\`~'"":\[\]\?\^]";
+        private static readonly string NumberTerminalRegex = @"[();{} !@#$%&*-+=/\`~'"":\[\]\?\^]";
 
         private static readonly Dictionary<string, TokenType> Keywords = new Dictionary<string, TokenType>
         {
@@ -77,47 +79,6 @@ namespace ABJAD.Lexer
             c = code[_current];
             IncrementIndex(1);
             return true;
-        }
-
-        private string NextWord()
-        {
-            int currentCopy = _current - 1;
-            char currentChar;
-            var wordBuilder = new StringBuilder();
-
-            while (!Regex.IsMatch((currentChar = code[currentCopy++]).ToString(), WordTerminalRegex))
-            {
-                wordBuilder.Append(currentChar);
-            }
-
-            return wordBuilder.ToString();
-        }
-
-        private bool IsNext(char expected, out char next)
-        {
-            if (!HasNext(out next))
-            {
-                throw new AbjadExpectedTokenNotFoundException(_line, expected.ToString());
-            }
-
-            if (next == expected)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        private void IncrementIndex(int num)
-        {
-            _current += num;
-            _lineIndex += num;
-        }
-
-        private void DecrementIndex(int num)
-        {
-            _current -= num;
-            _lineIndex -= num;
         }
 
         private void ScanToken(char c)
@@ -205,6 +166,61 @@ namespace ABJAD.Lexer
             }
         }
 
+        private string NextWord()
+        {
+            int currentCopy = _current - 1;
+            char currentChar;
+            var wordBuilder = new StringBuilder();
+
+            while (!Regex.IsMatch((currentChar = code[currentCopy++]).ToString(), WordTerminalRegex))
+            {
+                wordBuilder.Append(currentChar);
+            }
+
+            return wordBuilder.ToString();
+        }
+
+        private string NextNumber()
+        {
+            int currentCopy = _current - 1;
+            char currentChar;
+            var wordBuilder = new StringBuilder();
+
+            while (!Regex.IsMatch((currentChar = code[currentCopy++]).ToString(), NumberTerminalRegex))
+            {
+                wordBuilder.Append(currentChar);
+            }
+
+            return wordBuilder.ToString();
+        }
+
+        private bool IsNext(char expected, out char next)
+        {
+            if (!HasNext(out next))
+            {
+                throw new AbjadExpectedTokenNotFoundException(_line, expected.ToString());
+            }
+
+            if (next == expected)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private void IncrementIndex(int num)
+        {
+            _current += num;
+            _lineIndex += num;
+        }
+
+        private void DecrementIndex(int num)
+        {
+            _current -= num;
+            _lineIndex -= num;
+        }
+
         private void AddToken(TokenType type)
         {
             Tokens.Add(new Token(type, code[_current - 1]));
@@ -230,9 +246,11 @@ namespace ABJAD.Lexer
 
         private bool ScanNumber()
         {
-            var word = NextWord();
-            if (Regex.IsMatch(word, NumberRegex))
+            var word = NextNumber();
+
+            if (word.Length > 0 && Regex.IsMatch(word, NumberRegex))
             {
+                Console.WriteLine(word);
                 IncrementIndex(word.Length - 1);
                 AddToken(TokenType.NUMBER_CONST, word);
                 return true;

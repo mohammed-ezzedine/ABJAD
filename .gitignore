@@ -1,3 +1,5 @@
 flex-bison/
 .vs/
 bin/
+Program/
+obj/
