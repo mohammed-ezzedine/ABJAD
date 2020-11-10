@@ -98,22 +98,7 @@ namespace ABJAD.Lexer
                 case ')': AddToken(TokenType.CLOSE_PAREN); return;
                 case '+': AddToken(TokenType.PLUS); return;
                 case '*': AddToken(TokenType.TIMES); return;
-                case '-':
-                    if (Match(DigitRegex))
-                    {
-                        DecrementIndex(1);
-
-                        // check for negative numbers
-                        if (!ScanNumber())
-                        {
-                            throw new AbjadUnexpectedTokenException(_line, _lineIndex);
-                        }
-                    }
-                    else
-                    {
-                        AddToken(TokenType.MINUS);
-                    }
-                    return;
+                case '-':AddToken(TokenType.MINUS); return;
                 case '"':
                     var str = new StringBuilder();
                     while (!IsNext('"', out char next))
@@ -146,13 +131,13 @@ namespace ABJAD.Lexer
                     else
                         AddToken(TokenType.BANG);
                     return;
-                case '>':
+                case '<':
                     if (Match('='))
                         AddToken(TokenType.LESS_EQUAL);
                     else
                         AddToken(TokenType.LESS_THAN);
                     return;
-                case '<':
+                case '>':
                     if (Match('='))
                         AddToken(TokenType.GREATER_EQUAL);
                     else
@@ -307,6 +292,12 @@ namespace ABJAD.Lexer
 
         private char Peek()
         {
+            if (_current >= code.Length)
+            {
+                _current = int.MaxValue;
+                return '\n';
+            }
+
             var c = code[_current];
             IncrementIndex(1);
             return c;

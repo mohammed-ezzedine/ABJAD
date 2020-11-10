@@ -9,6 +9,8 @@ namespace ABJAD.Parser
         {
             T VisitCallExpr(CallExpr expr);
 
+            T VisitFieldExpr(FieldExpr expr);
+
             T VisitInstExpr(InstExpr expr);
 
             T VisitUnaryExpr(UnaryExpr expr);
@@ -40,6 +42,24 @@ namespace ABJAD.Parser
             public override T Accept<T>(IVisitor<T> visitor)
             {
                 return visitor.VisitCallExpr(this);
+            }
+        }
+
+        public class FieldExpr : Expression
+        {
+            public FieldExpr(Token @class, Token field)
+            {
+                Class = @class;
+                Field = field;
+            }
+
+            public Token Class { get; set; }
+
+            public Token Field { get; set; }
+
+            public override T Accept<T>(IVisitor<T> visitor)
+            {
+                return visitor.VisitFieldExpr(this);
             }
         }
 
