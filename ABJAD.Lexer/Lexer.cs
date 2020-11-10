@@ -1,5 +1,5 @@
-﻿using ABJAD.Models.Exceptions;
-using ABJAD.Reader;
+﻿using ABJAD.Models;
+using ABJAD.Models.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,8 +14,8 @@ namespace ABJAD.Lexer
         private static readonly string NumberRegex = @"^(0|[1-9][0-9]*)(\.[0-9]*)?$";
         private static readonly string LetterRegex = $"[\u0620-\u063A]|[\u0641-\u064A]";
         private static readonly string LiteralRegex = @$"({LetterRegex})({LetterRegex}|{DigitRegex}|(_))*";
-        private static readonly string WordTerminalRegex = @"[();{} !@#$%&*-+=.,/\`~'"":\[\]\?\^]";
-        private static readonly string NumberTerminalRegex = @"[();{} !@#$%&*-+=/\`~'"":\[\]\?\^]";
+        private static readonly string WordTerminalRegex = @"[();؛×،{} !@#$%&*-+=.,/\`~'"":\[\]\?\^]";
+        private static readonly string NumberTerminalRegex = @"[();؛×،{} !@#$%&*-+=/\`~'"":\[\]\?\^]";
 
         private static readonly Dictionary<string, TokenType> Keywords = new Dictionary<string, TokenType>
         {
@@ -27,7 +27,7 @@ namespace ABJAD.Lexer
             { "خطأ", TokenType.FALSE },
             { "خطا", TokenType.FALSE },
             { "بـ", TokenType.FOR },
-            { "وظيفة", TokenType.FUNC },
+            { "دالة", TokenType.FUNC },
             { "إذا", TokenType.IF },
             { "اذا", TokenType.IF },
             { "إنشاء", TokenType.NEW },
@@ -51,9 +51,9 @@ namespace ABJAD.Lexer
         private int _lineIndex = 0;
         private int _current = 0;
 
-        public Lexer(string fileName)
+        public Lexer(string code)
         {
-            code = AbjadFile.Read(fileName);
+            this.code = code;
         }
 
         public List<Token> Lex()
@@ -250,7 +250,6 @@ namespace ABJAD.Lexer
 
             if (word.Length > 0 && Regex.IsMatch(word, NumberRegex))
             {
-                Console.WriteLine(word);
                 IncrementIndex(word.Length - 1);
                 AddToken(TokenType.NUMBER_CONST, word);
                 return true;

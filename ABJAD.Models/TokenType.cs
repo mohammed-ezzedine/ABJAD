@@ -1,4 +1,4 @@
-﻿namespace ABJAD.Lexer
+﻿namespace ABJAD.Models
 {
     public enum TokenType
     {

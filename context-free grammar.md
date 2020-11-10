@@ -11,24 +11,27 @@ statement           →   expr_stmt
                     |   if_stmt
                     |   while_stmt
                     |   for_stmt
+                    |   block_stmt
                     |   return_stmt
                     |   assignment_stmt 
                     |   print_stmt 
                     |   comment_stmt;
 
-declaration         →   FUNC ID OPEN_PAREN parameter_list CLOSE_PAREN block
+declaration         →   FUNC ID OPEN_PAREN parameter_list CLOSE_PAREN block_stmt
                     |   CONST ID EQUAL expression SEMICOLON
                     |   VAR ID EQUAL expression SEMICOLON
-                    |   CLASS ID block ;
+                    |   CLASS ID block_stmt ;
 
 expr_stmt           →   expression SEMICOLON ;
 
 if_stmt             →   if_clause
                     |   if_clause else_clause ;
 
-while_stmt          →   WHILE OPEN_PAREN expression CLOSE_PAREN block ;
+while_stmt          →   WHILE OPEN_PAREN expression CLOSE_PAREN block_stmt ;
 
-for_stmt            →   FOR OPEN_PAREN declaration statement statement CLOSE_PAREN block ;
+for_stmt            →   FOR OPEN_PAREN declaration expression SEMICOLON expression CLOSE_PAREN block_stmt ;
+
+block_stmt          →   OPEN_BRACE binding_list CLOSE_BRACE ;
 
 return_stmt         →   RETURN expression SEMICOLON ;
 
@@ -38,25 +41,24 @@ print_stmt          →   PRINT OPEN_PAREN expression CLOSE_PAREN SEMICOLON ;
 
 comment_stmt        →   DOUBLE_SLASH ;
 
-parameter_list      →   primitive_list
+parameter_list      →   expr_list
                     |   ε ;
 
-block               →   OPEN_BRACE binding_list CLOSE_BRACE ;
+if_clause           →   IF OPEN_PAREN expression CLOSE_PAREN block_stmt ;
 
-if_clause           →   IF OPEN_PAREN expression CLOSE_PAREN block;
-
-else_clause         ->  ELSE block
+else_clause         →  ELSE block_stmt
 
 expression          →   call_expr
                     |   instant_expr
                     |   oper_expr
-                    |   primitive ;
+                    |   primitive 
+                    |   OPEN_PAREN expression CLOSE_PAREN ;
 
-primitive_list      →   primitive_list COMMA primitive
-                    |   primitive;
+expr_list           →   expr_list COMMA expression
+                    |   expression ;
 
-call_expr           →   ID DOT ID OPEN_PAREN parameter_list CLOSE_PAREN
-                    |   ID OPEN_PAREN parameter_list CLOSE_PAREN ;
+call_expr           →   ID DOT ID OPEN_PAREN parameter_list CLOSE_PAREN SEMICOLON
+                    |   ID OPEN_PAREN parameter_list CLOSE_PAREN SEMICOLON ;
 
 instant_expr        →   NEW ID OPEN_PAREN parameter_List CLOSE_PAREN ;
 
