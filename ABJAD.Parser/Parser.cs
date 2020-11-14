@@ -206,6 +206,7 @@ namespace ABJAD.Parser
         {
             Consume(FOR, "Wrong for statament syntax.");
             Consume(OPEN_PAREN, "For keyword should be followed by an opening '('");
+            Consume(VAR, "Variables only can be used in for loops.");
             var declaration = Variable();
             var condition = Expression();
             Consume(SEMICOLON, "Statement should be seperated by a semicolon.");

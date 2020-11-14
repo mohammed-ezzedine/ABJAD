@@ -20,7 +20,7 @@ namespace ABJAD.Parser
 
         public class FuncDecl : Declaration
         {
-            public FuncDecl(Token name, List<Expression> parameters, Statement block)
+            public FuncDecl(Token name, List<Expression> parameters, Statement.BlockStmt block)
             {
                 Name = name;
                 Parameters = parameters;
@@ -31,7 +31,7 @@ namespace ABJAD.Parser
 
             public List<Expression> Parameters { get; set; }
 
-            public Statement Block { get; set; }
+            public Statement.BlockStmt Block { get; set; }
 
             public override T Accept<T>(IVisitor<T> visitor)
             {
