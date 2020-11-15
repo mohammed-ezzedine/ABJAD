@@ -2,7 +2,7 @@
 using ABJAD.Parser;
 using System.Collections.Generic;
 
-namespace ABJAD.Interpreter
+namespace ABJAD.InterpretEngine
 {
     public class AbjadClass : IInstantiatable
     {

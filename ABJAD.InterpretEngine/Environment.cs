@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ABJAD.Interpreter
+namespace ABJAD.InterpretEngine
 {
     public class Environment : ICloneable
     {

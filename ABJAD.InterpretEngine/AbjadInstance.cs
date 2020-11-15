@@ -1,7 +1,6 @@
 ﻿using ABJAD.Models;
-using System.Collections.Generic;
 
-namespace ABJAD.Interpreter
+namespace ABJAD.InterpretEngine
 {
     public class AbjadInstance
     {

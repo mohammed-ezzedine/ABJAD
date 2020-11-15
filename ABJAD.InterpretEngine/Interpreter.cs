@@ -4,7 +4,7 @@ using ABJAD.Parser;
 using System.Collections.Generic;
 using static ABJAD.Models.TokenType;
 
-namespace ABJAD.Interpreter
+namespace ABJAD.InterpretEngine
 {
     public class Interpreter : 
         Binding.IVisitor<object>, 
