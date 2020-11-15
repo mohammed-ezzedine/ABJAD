@@ -15,7 +15,7 @@
     FALSE               =   خطأ | خطا
     NUMBER_CONST        =   [0|1-9][0-9]*.[0-9]+
     FOR                 =   بـ
-    FUNC                =   وظيفة
+    FUNC                =   دالة
     GREATER_EQUAL       =   <=
     GREATER_THAN        =   <
     ID                  =   
