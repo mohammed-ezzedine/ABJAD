@@ -8,8 +8,8 @@
     CONST               =   ثابت
     DIVIDED_BY          =   \
     DOT                 =   .
-    DOUBLE_SLASH		=	\\
-    ELSE				=	غيره
+    DOUBLE_SLASH	    =	\\
+    ELSE	            =	غيره
     EQUAL               =   =
     EQUAL_EQUAL         =   ==
     FALSE               =   خطأ | خطا
@@ -29,7 +29,7 @@
     OPEN_PAREN          =   )
     OR                  =   أو | او
     PLUS                =   +
-    PRINT				=	أكتب | اكتب
+    PRINT	            =	أكتب | اكتب
     RETURN              =   أرجع | ارجع
     SEMICOLON           =   ؛
     STRING_CONST        =   
