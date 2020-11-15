@@ -1,4 +1,4 @@
-﻿namespace ABJAD.Parser
+﻿namespace ABJAD.ParseEngine
 {
     public abstract class Binding
     {

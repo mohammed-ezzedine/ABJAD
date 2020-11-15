@@ -4,7 +4,7 @@ using static ABJAD.Models.TokenType;
 using System.Collections.Generic;
 using System;
 
-namespace ABJAD.Parser
+namespace ABJAD.ParseEngine
 {
     public class Parser
     {

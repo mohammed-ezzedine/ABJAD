@@ -1,7 +1,7 @@
 ﻿using ABJAD.Models;
 using System.Collections.Generic;
 
-namespace ABJAD.Parser
+namespace ABJAD.ParseEngine
 {
     public abstract class Expression
     {

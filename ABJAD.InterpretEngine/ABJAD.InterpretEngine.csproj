@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ABJAD.IO\ABJAD.IO.csproj" />
-    <ProjectReference Include="..\ABJAD.Parser\ABJAD.Parser.csproj" />
+    <ProjectReference Include="..\ABJAD.ParseEngine\ABJAD.ParseEngine.csproj" />
   </ItemGroup>
 
 </Project>
