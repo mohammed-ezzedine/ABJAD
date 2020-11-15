@@ -9,7 +9,7 @@ using static ABJAD.Models.TokenType;
 
 namespace LexerUnitTest
 {
-    public class Tests
+    class UnitTest1
     {
         private const string programPath = "test1.abjad";
         private List<Token> Tokens;

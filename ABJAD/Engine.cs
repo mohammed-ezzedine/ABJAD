@@ -18,7 +18,6 @@ namespace ABJAD
 
         static void Main(string[] args)
         {
-            //Execute(@"C:\Users\mezdn\Desktop\test.abjad", @"C:\Users\mezdn\Desktop\test.txt");
             CommandLine.Parser.Default.ParseArguments<Options>(args)
                 .WithParsed(o =>
                 {
