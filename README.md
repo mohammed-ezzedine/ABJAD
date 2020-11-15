@@ -21,6 +21,11 @@ Till now, it supports limitted and basic programming features:
 <li>Adding comments to the code</li>
 </ul>
 
+## Specifications:
+- ABJAD is a dynamically typed language (like JavaScript, Python, etc.)
+- ABJAD is an interpreted lanugage (opposite to compiled languages)
+- ABJAD programs have `.abjad` file extension
+
 ## Syntax:
 It is similar in syntax to JavaScript, with two basic modifications: the characters language (Arabic), and the text direction (From right to left).
 
@@ -30,9 +35,17 @@ Here is a Hello World example:
 - The syntax basically resembles the usage of curly braces as in C family languages
 - Statements must end with a semicolon ```؛```
 
-## Specifications:
-- ABJAD is a dynamically typed language (like JavaScript, Python, etc.)
-- ABJAD is an interpreted lanugage (opposite to compiled languages)
+For more details about the syntax, check this [wiki page](https://github.com/mezdn/ABJAD/wiki/Syntax)
+
+## ABJAD sample programs:
+- [test1.abjad](https://github.com/mezdn/ABJAD/tree/master/Test/test1.abjad)
+- [test2.abjad](https://github.com/mezdn/ABJAD/tree/master/Test/test2.abjad)
+- [test3.abjad](https://github.com/mezdn/ABJAD/tree/master/Test/test3.abjad)
+- [test4.abjad](https://github.com/mezdn/ABJAD/tree/master/Test/test4.abjad)
+- [test5.abjad](https://github.com/mezdn/ABJAD/tree/master/Test/test5.abjad)
+- [test6.abjad](https://github.com/mezdn/ABJAD/tree/master/Test/test6.abjad)
+- [test7.abjad](https://github.com/mezdn/ABJAD/tree/master/Test/test7.abjad)
+- [test8.abjad](https://github.com/mezdn/ABJAD/tree/master/Test/test8.abjad)
 
 ## Grammar:
 The grammar of the language is provided <a href="https://github.com/mezdn/ABJAD/blob/master/context-free%20grammar.md">here</a>.
