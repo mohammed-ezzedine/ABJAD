@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Product>ABJAD</Product>
+    <PackageId>ABJAD</PackageId>
+    <AssemblyName>abjad</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ABJAD.InterpretEngine\ABJAD.InterpretEngine.csproj" />
+    <ProjectReference Include="..\ABJAD.IO\ABJAD.IO.csproj" />
+    <ProjectReference Include="..\ABJAD.LexEngine\ABJAD.LexEngine.csproj" />
+    <ProjectReference Include="..\ABJAD.Models\ABJAD.Models.csproj" />
+    <ProjectReference Include="..\ABJAD.ParseEngine\ABJAD.ParseEngine.csproj" />
+  </ItemGroup>
+
+</Project>

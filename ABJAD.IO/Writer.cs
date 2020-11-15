@@ -7,11 +7,12 @@
         public Writer(string fileName)
         {
             this.fileName = fileName;
+            System.IO.File.WriteAllText(fileName, "");
         }
 
         public void Write(object txt)
         {
-            System.IO.File.WriteAllText(fileName, txt.ToString());
+            System.IO.File.AppendAllText(fileName, txt.ToString() + "\n");
         }
     }
 }

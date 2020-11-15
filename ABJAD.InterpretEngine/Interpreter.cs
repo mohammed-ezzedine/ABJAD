@@ -14,19 +14,20 @@ namespace ABJAD.InterpretEngine
         Statement.Visitor<object>
     {
         private Environment environment;
-        private Writer writer;
 
-        public Interpreter(Environment environment, bool referenceScope = false, Writer writer = null)
+        public Interpreter(Writer writer, Environment environment, bool referenceScope = false)
         {
             this.environment = referenceScope ? environment : environment.Clone() as Environment;
-            this.writer = writer;
+            Writer = writer;
         }
 
         public Interpreter(Writer writer)
         {
             environment = new Environment();
-            this.writer = writer;
+            Writer = writer;
         }
+
+        public static Writer Writer { get; set; }
 
         public void Interpret(List<Binding> bindings)
         {
@@ -315,7 +316,7 @@ namespace ABJAD.InterpretEngine
         public object VisitPrintStmt(Statement.PrintStmt stmt)
         {
             var val = Evaluate(stmt.Expr);
-            writer.Write(val);
+            Writer.Write(val);
             return null;
         }
 
@@ -323,7 +324,7 @@ namespace ABJAD.InterpretEngine
         {
             foreach (var binding in block.BindingList)
             {
-                var localInterpret = new Interpreter(env);
+                var localInterpret = new Interpreter(Writer, env);
                 var result = binding.Accept(localInterpret);
 
                 if (bindingIsReturn(binding)) return result;
@@ -336,7 +337,7 @@ namespace ABJAD.InterpretEngine
         {
             for (int i = 0; i < parametersDef.Count; i++)
             {
-                var localInterpreter = new Interpreter(scope, true);
+                var localInterpreter = new Interpreter(Writer, scope, true);
                 var paramName = localInterpreter.Evaluate(parametersDef[i]).ToString();
                 var paramValue = localInterpreter.Evaluate(parameters[i]);
                 scope.Set(paramName, paramValue);
@@ -345,7 +346,7 @@ namespace ABJAD.InterpretEngine
 
         public static void AddClassFieldsAndFunctionsToScope(Declaration.ClassDecl @class, Environment scope)
         {
-            var localInterpreter = new Interpreter(scope, true);
+            var localInterpreter = new Interpreter(Writer, scope, true);
             foreach (var binding in ((Statement.BlockStmt)@class.Block).BindingList)
             {
                 if (!BindingIsFunct(binding, out var funcDecl) ||
