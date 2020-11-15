@@ -1,16 +1,14 @@
 ﻿using ABJAD.Models;
 using ABJAD.Models.Exceptions;
-using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace ABJAD.Lexer
+namespace ABJAD.LexEngine
 {
     public class Lexer
     {
         private static readonly string DigitRegex = "[0-9]";
-        private static readonly string NonZeroDigitRegex = "[1-9]";
         private static readonly string NumberRegex = @"^(0|[1-9][0-9]*)(\.[0-9]*)?$";
         private static readonly string LetterRegex = $"[\u0620-\u063A]|[\u0641-\u064A]";
         private static readonly string LiteralRegex = @$"({LetterRegex})({LetterRegex}|{DigitRegex}|(_))*";
