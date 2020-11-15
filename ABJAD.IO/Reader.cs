@@ -2,9 +2,9 @@
 using System.IO;
 using System.Linq;
 
-namespace ABJAD.Reader
+namespace ABJAD.IO
 {
-    public class AbjadFile
+    public class Reader
     {
         public static string Read(string fileName)
         {
@@ -13,12 +13,12 @@ namespace ABJAD.Reader
                 throw new AbjadInvalidFileExcepion();
             }
 
-            if (!File.Exists(fileName))
+            if (!System.IO.File.Exists(fileName))
             {
                 throw new FileNotFoundException();
             }
 
-            var code = File.ReadAllText(fileName);
+            var code = System.IO.File.ReadAllText(fileName);
             return code;
         }
 

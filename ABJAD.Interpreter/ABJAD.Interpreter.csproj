@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ABJAD.Parser\ABJAD.Parser.csproj" />
+    <ProjectReference Include="..\ABJAD.Reader\ABJAD.File.csproj" />
   </ItemGroup>
 
 </Project>

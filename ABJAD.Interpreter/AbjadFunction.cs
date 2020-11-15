@@ -19,13 +19,6 @@ namespace ABJAD.Interpreter
         {
             Interpreter.AddParamsToScope(Declaration.Parameters, parameters, environment);
 
-            //foreach (var param in Declaration.Parameters)
-            //{
-            //    var localInterpreter = new Interpreter(environment);
-            //    var paramVal = param.Accept(localInterpreter);
-            //    environment.Set(nameof(param), param);
-            //}
-
             return Interpreter.ExecuteBlock(Declaration.Block, environment);
         }
     }

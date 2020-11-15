@@ -427,7 +427,6 @@ namespace ABJAD.Parser
             var parameters = Parameters();
 
             Consume(CLOSE_PAREN, "Class parameters should be followed by a closing ')'");
-            //Consume(SEMICOLON, "An expression should be followed by a semicolon.");
 
             return new Expression.InstExpr(className, parameters);
         }

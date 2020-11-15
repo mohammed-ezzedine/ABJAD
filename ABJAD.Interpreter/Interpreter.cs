@@ -1,7 +1,6 @@
-﻿using ABJAD.Models;
+﻿using ABJAD.IO;
 using ABJAD.Models.Exceptions;
 using ABJAD.Parser;
-using System;
 using System.Collections.Generic;
 using static ABJAD.Models.TokenType;
 
@@ -15,15 +14,18 @@ namespace ABJAD.Interpreter
         Statement.Visitor<object>
     {
         private Environment environment;
+        private Writer writer;
 
-        public Interpreter(Environment environment, bool referenceScope = false)
+        public Interpreter(Environment environment, bool referenceScope = false, Writer writer = null)
         {
-            this.environment = referenceScope? environment : environment.Clone() as Environment;
+            this.environment = referenceScope ? environment : environment.Clone() as Environment;
+            this.writer = writer;
         }
 
-        public Interpreter()
+        public Interpreter(Writer writer)
         {
             environment = new Environment();
+            this.writer = writer;
         }
 
         public void Interpret(List<Binding> bindings)
@@ -166,12 +168,7 @@ namespace ABJAD.Interpreter
 
             foreach (var binding in classBlock.BindingList)
             {
-                //if (BindingIsFunct(binding, out var funcDecl) &&
-                //    funcDecl.Parameters.Count == expr.Parameters.Count &&
-                //    funcDecl?.Name.Text == expr.Class.Text)
-                //{
-                    return @class.Instantiate(expr.Parameters);
-                //}
+                return @class.Instantiate(expr.Parameters);
             }
 
             throw new AbjadUnknownFunctionException(expr.Class.Text, expr.Parameters.Count);
@@ -318,7 +315,7 @@ namespace ABJAD.Interpreter
         public object VisitPrintStmt(Statement.PrintStmt stmt)
         {
             var val = Evaluate(stmt.Expr);
-            Console.WriteLine(val);
+            writer.Write(val);
             return null;
         }
 

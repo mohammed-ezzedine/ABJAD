@@ -20,17 +20,9 @@ namespace ABJAD.Interpreter
         {
             Interpreter.AddClassFieldsAndFunctionsToScope(Declaration, Environment);
             var constructor = GetConstructor();
-            //Interpreter.AddParamsToScope(constructor.Parameters, parameters, Environment);
 
             var initializer = new AbjadFunction(constructor, Environment);
             initializer.Call(parameters);
-
-            //foreach (var param in Declaration.Parameters)
-            //{
-            //    var localInterpreter = new Interpreter(environment);
-            //    var paramVal = param.Accept(localInterpreter);
-            //    environment.Set(nameof(param), param);
-            //}
 
             return new AbjadInstance(Environment, Declaration.Name);
         }
