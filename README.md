@@ -63,4 +63,4 @@ You're going to need an editor that supports Right-To-Left text alignment. You c
 
 
 ## Inspiration and Reference:
-<a href="https://github.com/mrahhal/CSharpLox">CSharpLox</a>
+<a href="https://github.com/mrahhal/CSharpLox">CSharpLox</a> by Mohammad Rahhal.
