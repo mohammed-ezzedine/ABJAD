@@ -55,5 +55,12 @@ A reference to words-tokens mapping is provided <a href="https://github.com/mezd
 ## Installation:
 Instructions for installing and using ABJAD's interpreter are provided in the wiki <a href="https://github.com/mezdn/ABJAD/wiki">here</a>
 
+## Writing ABJAD programs:
+You're going to need an editor that supports Right-To-Left text alignment. You can use [Notepad++](https://notepad-plus-plus.org/downloads/)
+
+## License:
+[MIT License](https://github.com/mezdn/ABJAD/blob/master/LICENSE.md) for open-source projects. 
+
+
 ## Inspiration and Reference:
-<a href="https://github.com/mrahhal/CSharpLox">CSharpLox</a>
+<a href="https://github.com/mrahhal/CSharpLox">CSharpLox</a> by Mohammad Rahhal.

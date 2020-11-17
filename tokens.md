@@ -1,4 +1,4 @@
-    AND                 =   أيضا | ايضا
+    AND                 =   &&
     BANG                =   !
     BANG_EQUAL          =   =!
     CLASS               =   صنف
@@ -8,14 +8,13 @@
     CONST               =   ثابت
     DIVIDED_BY          =   \
     DOT                 =   .
-    DOUBLE_SLASH	    =	\\
     ELSE	            =	غيره
     EQUAL               =   =
     EQUAL_EQUAL         =   ==
     FALSE               =   خطأ | خطا
     NUMBER_CONST        =   [0|1-9][0-9]*.[0-9]+
     FOR                 =   بـ
-    FUNC                =   وظيفة
+    FUNC                =   دالة
     GREATER_EQUAL       =   <=
     GREATER_THAN        =   <
     ID                  =   
@@ -27,7 +26,7 @@
     NULL                =   عدم
     OPEN_BRACE          =   }
     OPEN_PAREN          =   )
-    OR                  =   أو | او
+    OR                  =   ||
     PLUS                =   +
     PRINT	            =	أكتب | اكتب
     RETURN              =   أرجع | ارجع

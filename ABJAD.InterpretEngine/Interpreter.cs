@@ -167,12 +167,7 @@ namespace ABJAD.InterpretEngine
                 throw new AbjadInterpretingException("Invalid class block syntax.");
             }
 
-            foreach (var binding in classBlock.BindingList)
-            {
-                return @class.Instantiate(expr.Parameters);
-            }
-
-            throw new AbjadUnknownFunctionException(expr.Class.Text, expr.Parameters.Count);
+            return @class.Instantiate(expr.Parameters);
         }
 
         public object VisitUnaryExpr(Expression.UnaryExpr expr)
@@ -316,7 +311,8 @@ namespace ABJAD.InterpretEngine
         public object VisitPrintStmt(Statement.PrintStmt stmt)
         {
             var val = Evaluate(stmt.Expr);
-            Writer.Write(val);
+            var edited = val.ToString().Replace("True", "صحيح").Replace("False", "خطأ").Replace("null", "عدم");
+            Writer.Write(edited);
             return null;
         }
 
