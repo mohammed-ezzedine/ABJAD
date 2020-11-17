@@ -18,8 +18,6 @@ namespace ABJAD.LexEngine
 
         private static readonly Dictionary<string, TokenType> Keywords = new Dictionary<string, TokenType>
         {
-            { "أيضا", AND },
-            { "ايضا", AND },
             { "صنف", CLASS },
             { "ثابت", CONST },
             { "غيره", ELSE },
@@ -31,8 +29,6 @@ namespace ABJAD.LexEngine
             { "اذا", IF },
             { "إنشاء", NEW },
             { "عدم", NULL },
-            { "أو", OR },
-            { "او", OR },
             { "أكتب", PRINT },
             { "اكتب", PRINT },
             { "أرجع", RETURN },
@@ -198,6 +194,18 @@ namespace ABJAD.LexEngine
                         AddToken(GREATER_EQUAL);
                     else
                         AddToken(GREATER_THAN);
+                    return;
+                case '&':
+                    if (Match('&'))
+                        AddToken(AND);
+                    else
+                        throw new AbjadUnexpectedTokenException(_line, _lineIndex);
+                    return;
+                case '|':
+                    if (Match('|'))
+                        AddToken(OR);
+                    else
+                        throw new AbjadUnexpectedTokenException(_line, _lineIndex);
                     return;
                 default:
                     if (ScanKeyword()) return;

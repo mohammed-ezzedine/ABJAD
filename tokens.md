@@ -1,4 +1,4 @@
-    AND                 =   أيضا | ايضا
+    AND                 =   &&
     BANG                =   !
     BANG_EQUAL          =   =!
     CLASS               =   صنف
@@ -27,7 +27,7 @@
     NULL                =   عدم
     OPEN_BRACE          =   }
     OPEN_PAREN          =   )
-    OR                  =   أو | او
+    OR                  =   ||
     PLUS                =   +
     PRINT	            =	أكتب | اكتب
     RETURN              =   أرجع | ارجع
