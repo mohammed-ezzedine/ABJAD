@@ -1,4 +1,4 @@
-    AND                 =   أيضا | ايضا
+    AND                 =   &&
     BANG                =   !
     BANG_EQUAL          =   =!
     CLASS               =   صنف
@@ -8,7 +8,6 @@
     CONST               =   ثابت
     DIVIDED_BY          =   \
     DOT                 =   .
-    DOUBLE_SLASH	    =	\\
     ELSE	            =	غيره
     EQUAL               =   =
     EQUAL_EQUAL         =   ==
@@ -27,7 +26,7 @@
     NULL                =   عدم
     OPEN_BRACE          =   }
     OPEN_PAREN          =   )
-    OR                  =   أو | او
+    OR                  =   ||
     PLUS                =   +
     PRINT	            =	أكتب | اكتب
     RETURN              =   أرجع | ارجع

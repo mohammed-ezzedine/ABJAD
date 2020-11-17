@@ -39,8 +39,6 @@
 
     print_stmt          →   PRINT OPEN_PAREN expression CLOSE_PAREN SEMICOLON ;
 
-    comment_stmt        →   DOUBLE_SLASH ;
-
     parameter_list      →   expr_list
                         |   ε ;
 

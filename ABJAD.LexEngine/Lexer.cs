@@ -3,6 +3,7 @@ using ABJAD.Models.Exceptions;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using static ABJAD.Models.TokenType;
 
 namespace ABJAD.LexEngine
 {
@@ -17,28 +18,24 @@ namespace ABJAD.LexEngine
 
         private static readonly Dictionary<string, TokenType> Keywords = new Dictionary<string, TokenType>
         {
-            { "أيضا", TokenType.AND },
-            { "ايضا", TokenType.AND },
-            { "صنف", TokenType.CLASS },
-            { "ثابت", TokenType.CONST },
-            { "غيره", TokenType.ELSE },
-            { "خطأ", TokenType.FALSE },
-            { "خطا", TokenType.FALSE },
-            { "بـ", TokenType.FOR },
-            { "دالة", TokenType.FUNC },
-            { "إذا", TokenType.IF },
-            { "اذا", TokenType.IF },
-            { "إنشاء", TokenType.NEW },
-            { "عدم", TokenType.NULL },
-            { "أو", TokenType.OR },
-            { "او", TokenType.OR },
-            { "أكتب", TokenType.PRINT },
-            { "اكتب", TokenType.PRINT },
-            { "أرجع", TokenType.RETURN },
-            { "ارجع", TokenType.RETURN },
-            { "صحيح", TokenType.TRUE },
-            { "طالما", TokenType.WHILE },
-            { "متغير", TokenType.VAR },
+            { "صنف", CLASS },
+            { "ثابت", CONST },
+            { "غيره", ELSE },
+            { "خطأ", FALSE },
+            { "خطا", FALSE },
+            { "بـ", FOR },
+            { "دالة", FUNC },
+            { "إذا", IF },
+            { "اذا", IF },
+            { "إنشاء", NEW },
+            { "عدم", NULL },
+            { "أكتب", PRINT },
+            { "اكتب", PRINT },
+            { "أرجع", RETURN },
+            { "ارجع", RETURN },
+            { "صحيح", TRUE },
+            { "طالما", WHILE },
+            { "متغير", VAR },
         };
 
         private readonly string code;
@@ -87,59 +84,123 @@ namespace ABJAD.LexEngine
                 case '\r': return;
                 case ' ': return; // skip white spaces
                 case '\n': _line++; _lineIndex = 0; return;
-                case '؛': AddToken(TokenType.SEMICOLON); return;
-                case '،': AddToken(TokenType.COMMA); return;
-                case '.': AddToken(TokenType.DOT); return;
-                case '{': AddToken(TokenType.OPEN_BRACE); return;
-                case '}': AddToken(TokenType.CLOSE_BRACE); return;
-                case '(': AddToken(TokenType.OPEN_PAREN); return;
-                case ')': AddToken(TokenType.CLOSE_PAREN); return;
-                case '+': AddToken(TokenType.PLUS); return;
-                case '*': AddToken(TokenType.TIMES); return;
-                case '-':AddToken(TokenType.MINUS); return;
+                case '؛': AddToken(SEMICOLON); return;
+                case '،': AddToken(COMMA); return;
+                case '.': AddToken(DOT); return;
+                case '{': AddToken(OPEN_BRACE); return;
+                case '}': AddToken(CLOSE_BRACE); return;
+                case '(': AddToken(OPEN_PAREN); return;
+                case ')': AddToken(CLOSE_PAREN); return;
+                case '+':
+                    if (Match('+'))
+                    {
+                        AddToken(EQUAL);
+                        AddToken(Previous(1));
+                        AddToken(PLUS);
+                        AddToken(NUMBER_CONST, "1");
+                    }
+                    else if (Match('='))
+                    {
+                        AddToken(EQUAL);
+                        AddToken(Previous(1));
+                        AddToken(PLUS);
+                    }
+                    else
+                    {
+                        AddToken(PLUS);
+                    }
+                    return;
+                case '-':
+                    if (Match('+'))
+                    {
+                        AddToken(EQUAL);
+                        AddToken(Previous(1));
+                        AddToken(MINUS);
+                        AddToken(NUMBER_CONST, "1");
+                    }
+                    else if (Match('='))
+                    {
+                        AddToken(EQUAL);
+                        AddToken(Previous(1));
+                        AddToken(MINUS);
+                    }
+                    else
+                    {
+                        AddToken(MINUS);
+                    }
+                    return;
+                case '*':
+                    if (Match('='))
+                    {
+                        AddToken(EQUAL);
+                        AddToken(Previous(1));
+                        AddToken(TIMES);
+                    }
+                    else
+                    {
+                        AddToken(TIMES);
+                    }
+                    return;
                 case '"':
                     var str = new StringBuilder();
                     while (!IsNext('"', out char next))
                     {
                         str.Append(next);
                     }
-                    AddToken(TokenType.STRING_CONST, str.ToString());
+                    AddToken(STRING_CONST, str.ToString());
                     return;
                 case '\\':
-                    if (Match('\\'))
+                    if (Match('='))
                     {
-                        while (Peek() != '\n') continue;
-
-                        DecrementIndex(1);
+                        AddToken(EQUAL);
+                        AddToken(Previous(1));
+                        AddToken(DIVIDED_BY);
                     }
                     else
                     {
-                        AddToken(TokenType.DIVIDED_BY);
+                        AddToken(DIVIDED_BY);
                     }
+                    return;
+                case '#':
+                    while (Peek() != '\n') continue; // ignore comments
+
+                    DecrementIndex(1);
                     return;
                 case '=':
                     if (Match('='))
-                        AddToken(TokenType.EQUAL_EQUAL);
+                        AddToken(EQUAL_EQUAL);
                     else
-                        AddToken(TokenType.EQUAL);
+                        AddToken(EQUAL);
                     return;
                 case '!':
                     if (Match('='))
-                        AddToken(TokenType.BANG_EQUAL);
+                        AddToken(BANG_EQUAL);
                     else
-                        AddToken(TokenType.BANG);
+                        AddToken(BANG);
                     return;
                 case '<':
                     if (Match('='))
-                        AddToken(TokenType.LESS_EQUAL);
+                        AddToken(LESS_EQUAL);
                     else
-                        AddToken(TokenType.LESS_THAN);
+                        AddToken(LESS_THAN);
                     return;
                 case '>':
                     if (Match('='))
-                        AddToken(TokenType.GREATER_EQUAL);
+                        AddToken(GREATER_EQUAL);
                     else
-                        AddToken(TokenType.GREATER_THAN);
+                        AddToken(GREATER_THAN);
+                    return;
+                case '&':
+                    if (Match('&'))
+                        AddToken(AND);
+                    else
+                        throw new AbjadUnexpectedTokenException(_line, _lineIndex);
+                    return;
+                case '|':
+                    if (Match('|'))
+                        AddToken(OR);
+                    else
+                        throw new AbjadUnexpectedTokenException(_line, _lineIndex);
                     return;
                 default:
                     if (ScanKeyword()) return;
@@ -214,13 +275,19 @@ namespace ABJAD.LexEngine
             Tokens.Add(new Token(type, text));
         }
 
+        private void AddToken(Token token)
+        {
+            var newToken = new Token(token.Type, token.Text);
+            Tokens.Add(newToken);
+        }
+
         private bool ScanLiteral()
         {
             var word = NextWord();
             if (Regex.IsMatch(word, LiteralRegex))
             {
                 IncrementIndex(word.Length - 1);
-                AddToken(TokenType.ID, word);
+                AddToken(ID, word);
                 return true;
             }
 
@@ -234,7 +301,7 @@ namespace ABJAD.LexEngine
             if (word.Length > 0 && Regex.IsMatch(word, NumberRegex))
             {
                 IncrementIndex(word.Length - 1);
-                AddToken(TokenType.NUMBER_CONST, word);
+                AddToken(NUMBER_CONST, word);
                 return true;
             }
 
@@ -299,6 +366,17 @@ namespace ABJAD.LexEngine
             var c = code[_current];
             IncrementIndex(1);
             return c;
+        }
+
+        private Token Previous(int i = 0)
+        {
+            var length = Tokens.Count;
+            if (length < i)
+            {
+                throw new AbjadLexingException("Range out of bound.");
+            }
+
+            return Tokens[length - i - 1];
         }
     }
 }
