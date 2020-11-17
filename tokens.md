@@ -8,7 +8,6 @@
     CONST               =   ثابت
     DIVIDED_BY          =   \
     DOT                 =   .
-    DOUBLE_SLASH	    =	\\
     ELSE	            =	غيره
     EQUAL               =   =
     EQUAL_EQUAL         =   ==

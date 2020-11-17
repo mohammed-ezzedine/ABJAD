@@ -150,26 +150,21 @@ namespace ABJAD.LexEngine
                     AddToken(STRING_CONST, str.ToString());
                     return;
                 case '\\':
-                    if (Match('\\'))
+                    if (Match('='))
                     {
-                        while (Peek() != '\n') continue;
-
-                        DecrementIndex(1);
+                        AddToken(EQUAL);
+                        AddToken(Previous(1));
+                        AddToken(DIVIDED_BY);
                     }
                     else
                     {
-                        if (Match('='))
-                        {
-                            AddToken(EQUAL);
-                            AddToken(Previous(1));
-                            AddToken(DIVIDED_BY);
-                        }
-                        else
-                        {
-                            AddToken(DIVIDED_BY);
-                        }
-                        return;
+                        AddToken(DIVIDED_BY);
                     }
+                    return;
+                case '#':
+                    while (Peek() != '\n') continue; // ignore comments
+
+                    DecrementIndex(1);
                     return;
                 case '=':
                     if (Match('='))
