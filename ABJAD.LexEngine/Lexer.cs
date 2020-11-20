@@ -21,17 +21,13 @@ namespace ABJAD.LexEngine
             { "صنف", CLASS },
             { "ثابت", CONST },
             { "غيره", ELSE },
-            { "خطأ", FALSE },
             { "خطا", FALSE },
             { "بـ", FOR },
             { "دالة", FUNC },
-            { "إذا", IF },
             { "اذا", IF },
             { "إنشاء", NEW },
             { "عدم", NULL },
-            { "أكتب", PRINT },
             { "اكتب", PRINT },
-            { "أرجع", RETURN },
             { "ارجع", RETURN },
             { "صحيح", TRUE },
             { "طالما", WHILE },
@@ -48,7 +44,7 @@ namespace ABJAD.LexEngine
 
         public Lexer(string code)
         {
-            this.code = code;
+            this.code = IgnoreCaseSensitivity(code);
         }
 
         public List<Token> Lex()
@@ -72,6 +68,7 @@ namespace ABJAD.LexEngine
             }
 
             c = code[_current];
+            //c = IgnoreCaseSensitivity(code[_current]);
             IncrementIndex(1);
             return true;
         }
@@ -267,26 +264,18 @@ namespace ABJAD.LexEngine
 
         private void AddToken(TokenType type)
         {
-            Tokens.Add(new Token(type, IgnoreCaseSensitivity(code[_current - 1])));
+            Tokens.Add(new Token(type, code[_current - 1]));
         }
 
         private void AddToken(TokenType type, string text)
         {
-            Tokens.Add(new Token(type, IgnoreCaseSensitivity(text)));
+            Tokens.Add(new Token(type, text));
         }
 
         private void AddToken(Token token)
         {
             var newToken = new Token(token.Type, token.Text);
             Tokens.Add(newToken);
-        }
-
-        private char IgnoreCaseSensitivity(char c)
-        {
-            if (c == 'أ' || c == 'إ' || c == 'آ')
-                return 'ا';
-
-            return c;
         }
 
         private string IgnoreCaseSensitivity(string str)

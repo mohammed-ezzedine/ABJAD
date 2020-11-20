@@ -3,3 +3,4 @@ flex-bison/
 bin/
 Program/
 obj/
+Test/*.txt
