@@ -8,28 +8,28 @@
     CONST               =   ثابت
     DIVIDED_BY          =   \
     DOT                 =   .
-    ELSE	            =	غيره
+    ELSE	            =	وإلا
     EQUAL               =   =
     EQUAL_EQUAL         =   ==
-    FALSE               =   خطأ | خطا
+    FALSE               =   خطا
     NUMBER_CONST        =   [0|1-9][0-9]*.[0-9]+
-    FOR                 =   بـ
+    FOR                 =   كرر
     FUNC                =   دالة
     GREATER_EQUAL       =   <=
     GREATER_THAN        =   <
     ID                  =   
-    IF                  =   إذا | اذا
+    IF                  =   اذا
     LESS_EQUAL          =   >=
     LESS_THAN           =   >
     MINUS               =   -
-    NEW                 =   إنشاء
+    NEW                 =   انشئ
     NULL                =   عدم
     OPEN_BRACE          =   }
     OPEN_PAREN          =   )
     OR                  =   ||
     PLUS                =   +
-    PRINT	            =	أكتب | اكتب
-    RETURN              =   أرجع | ارجع
+    PRINT	            =	اكتب
+    RETURN              =   ارجع
     SEMICOLON           =   ؛
     STRING_CONST        =   
     TIMES               =   *

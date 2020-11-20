@@ -111,7 +111,7 @@ namespace ABJAD.LexEngine
                     }
                     return;
                 case '-':
-                    if (Match('+'))
+                    if (Match('-'))
                     {
                         AddToken(EQUAL);
                         AddToken(Previous(1));
@@ -267,18 +267,35 @@ namespace ABJAD.LexEngine
 
         private void AddToken(TokenType type)
         {
-            Tokens.Add(new Token(type, code[_current - 1]));
+            Tokens.Add(new Token(type, IgnoreCaseSensitivity(code[_current - 1])));
         }
 
         private void AddToken(TokenType type, string text)
         {
-            Tokens.Add(new Token(type, text));
+            Tokens.Add(new Token(type, IgnoreCaseSensitivity(text)));
         }
 
         private void AddToken(Token token)
         {
             var newToken = new Token(token.Type, token.Text);
             Tokens.Add(newToken);
+        }
+
+        private char IgnoreCaseSensitivity(char c)
+        {
+            if (c == 'أ' || c == 'إ' || c == 'آ')
+                return 'ا';
+
+            return c;
+        }
+
+        private string IgnoreCaseSensitivity(string str)
+        {
+            return str
+                .Replace("ـ", "")
+                .Replace('آ', 'ا')
+                .Replace('أ', 'ا')
+                .Replace('إ', 'ا');
         }
 
         private bool ScanLiteral()
