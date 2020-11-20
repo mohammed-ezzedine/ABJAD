@@ -240,15 +240,7 @@ namespace ABJAD.InterpretEngine
 
         public object VisitNull(Primitive.Null @null) => null;
 
-        public object VisitIdentifier(Primitive.Identifier identifier)
-        {
-            if (environment.ContainsKey(identifier.value))
-            {
-                return environment.Get(identifier.value);
-            }
-
-            return identifier.value;
-        }
+        public object VisitIdentifier(Primitive.Identifier identifier) =>  environment.Get(identifier.value);
 
         public object VisitExprStmt(Statement.ExprStmt stmt)
         {
@@ -333,9 +325,16 @@ namespace ABJAD.InterpretEngine
         {
             for (int i = 0; i < parametersDef.Count; i++)
             {
+                // We want to get the parameter name from the funcion decaration to make it our key
+                // for the value evaluated from the expression passed in the function call.
+
+                var defPrimtiveExpr = parametersDef[i] as Expression.PrimitiveExpr;
+                var defPrimitive = defPrimtiveExpr?.Primitive as Primitive.Identifier;
+                var paramName = defPrimitive?.value;
+
                 var localInterpreter = new Interpreter(Writer, scope, true);
-                var paramName = localInterpreter.Evaluate(parametersDef[i]).ToString();
                 var paramValue = localInterpreter.Evaluate(parameters[i]);
+
                 scope.Set(paramName, paramValue);
             }
         }
