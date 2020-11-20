@@ -20,12 +20,12 @@ namespace ABJAD.LexEngine
         {
             { "صنف", CLASS },
             { "ثابت", CONST },
-            { "غيره", ELSE },
+            { "والا", ELSE },
             { "خطا", FALSE },
-            { "بـ", FOR },
+            { "كرر", FOR },
             { "دالة", FUNC },
             { "اذا", IF },
-            { "إنشاء", NEW },
+            { "انشئ", NEW },
             { "عدم", NULL },
             { "اكتب", PRINT },
             { "ارجع", RETURN },
@@ -68,7 +68,6 @@ namespace ABJAD.LexEngine
             }
 
             c = code[_current];
-            //c = IgnoreCaseSensitivity(code[_current]);
             IncrementIndex(1);
             return true;
         }

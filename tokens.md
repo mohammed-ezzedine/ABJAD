@@ -8,7 +8,7 @@
     CONST               =   ثابت
     DIVIDED_BY          =   \
     DOT                 =   .
-    ELSE	            =	وإلا
+    ELSE	            =	والا
     EQUAL               =   =
     EQUAL_EQUAL         =   ==
     FALSE               =   خطا
