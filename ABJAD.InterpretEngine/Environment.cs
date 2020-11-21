@@ -23,7 +23,18 @@ namespace ABJAD.InterpretEngine
 
         public object Clone()
         {
-            return MemberwiseClone();
+            var consts = new Dictionary<string, dynamic>();
+            var env = new Dictionary<string, dynamic>();
+            foreach (var key in constants.Keys)
+            {
+                consts[key] = constants[key];
+            }
+            foreach (var key in environment.Keys)
+            {
+                env[key] = environment[key];
+            }
+            return new Environment(env, consts);
+            //return MemberwiseClone();
         }
 
         public dynamic Get(string key)

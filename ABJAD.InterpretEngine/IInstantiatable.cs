@@ -5,6 +5,6 @@ namespace ABJAD.InterpretEngine
 {
     public interface IInstantiatable
     {
-        public object Instantiate(List<Expression> paramaters);
+        public object Instantiate(List<object> paramaters);
     }
 }

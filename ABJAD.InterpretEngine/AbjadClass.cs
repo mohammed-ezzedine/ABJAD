@@ -16,7 +16,7 @@ namespace ABJAD.InterpretEngine
 
         public Environment Environment { get; set; }
 
-        public object Instantiate(List<Expression> parameters)
+        public object Instantiate(List<object> parameters)
         {
             Interpreter.AddClassFieldsAndFunctionsToScope(Declaration, Environment);
             var constructor = GetConstructor();

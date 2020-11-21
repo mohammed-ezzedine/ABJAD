@@ -2,6 +2,7 @@
 using ABJAD.Models.Exceptions;
 using ABJAD.ParseEngine;
 using System.Collections.Generic;
+using System.Linq;
 using static ABJAD.Models.TokenType;
 
 namespace ABJAD.InterpretEngine
@@ -64,7 +65,7 @@ namespace ABJAD.InterpretEngine
                 throw new AbjadNameTakenException(declaration.Name.Text);
             }
 
-            var abjadFunction = new AbjadFunction(declaration, environment);
+            var abjadFunction = new AbjadFunction(declaration, environment.Clone() as Environment);
             environment.Set(declaration.Name.Text, abjadFunction);
             return null;
         }
@@ -138,8 +139,12 @@ namespace ABJAD.InterpretEngine
             {
                 throw new AbjadUnknownFunctionException(expr.Func.Text, expr.Parameters.Count);
             }
+
+            var parameters = expr.Parameters.Select(p => Evaluate(p)).ToList();
+            //var env = environment.Clone() as Environment;
             
-            return abjadFunc.Call(expr.Parameters);
+            //return abjadFunc.Call(expr.Parameters);
+            return abjadFunc.Call(parameters);
         }
 
         public object VisitFieldExpr(Expression.FieldExpr expr)
@@ -167,7 +172,9 @@ namespace ABJAD.InterpretEngine
                 throw new AbjadInterpretingException("Invalid class block syntax.");
             }
 
-            return @class.Instantiate(expr.Parameters);
+            var parameters = expr.Parameters.Select(p => Evaluate(p)).ToList();
+
+            return @class.Instantiate(parameters);
         }
 
         public object VisitUnaryExpr(Expression.UnaryExpr expr)
@@ -189,6 +196,9 @@ namespace ABJAD.InterpretEngine
             var oper1 = Evaluate(expr.Operand1);
             var oper2 = Evaluate(expr.Operand2);
 
+            double d1;
+            double d2;
+
             switch (expr.Operation.Type)
             {
                 case AND:
@@ -202,17 +212,37 @@ namespace ABJAD.InterpretEngine
                 case DIVIDED_BY:
                     return (double)oper1 / (double)oper2;
                 case GREATER_EQUAL:
-                    return (double)oper1 >= (double)oper2;
+                    if (double.TryParse(oper1.ToString(), out d1) && double.TryParse(oper2.ToString(), out d2))
+                    {
+                        return d1 >= d2;
+                    }
+                    return oper1.ToString().CompareTo(oper2.ToString()) >= 0;
                 case GREATER_THAN:
-                    return (double)oper1 > (double)oper2;
+                    if (double.TryParse(oper1.ToString(), out d1) && double.TryParse(oper2.ToString(), out d2))
+                    {
+                        return d1 > d2;
+                    }
+                    return oper1.ToString().CompareTo(oper2.ToString()) > 0;
                 case LESS_EQUAL:
-                    return (double)oper1 <= (double)oper2;
+                    if (double.TryParse(oper1.ToString(), out d1) && double.TryParse(oper2.ToString(), out d2))
+                    {
+                        return d1 <= d2;
+                    }
+                    return oper1.ToString().CompareTo(oper2.ToString()) <= 0;
                 case LESS_THAN:
-                    return (double)oper1 < (double)oper2;
+                    if (double.TryParse(oper1.ToString(), out d1) && double.TryParse(oper2.ToString(), out d2))
+                    {
+                        return d1 < d2;
+                    }
+                    return oper1.ToString().CompareTo(oper2.ToString()) < 0;
                 case MINUS:
                     return (double)oper1 - (double)oper2;
                 case PLUS:
-                    return (double)oper1 + (double)oper2;
+                    if (double.TryParse(oper1.ToString(), out d1) && double.TryParse(oper2.ToString(), out d2))
+                    {
+                        return d1 + d2;
+                    }
+                    return oper1.ToString() + oper2.ToString();
                 case TIMES:
                     return (double)oper1 * (double)oper2;
                 default:
@@ -244,7 +274,8 @@ namespace ABJAD.InterpretEngine
 
         public object VisitExprStmt(Statement.ExprStmt stmt)
         {
-            return Evaluate(stmt.Expr);
+            Evaluate(stmt.Expr);
+            return null;
         }
 
         public object VisitIfStmt(Statement.IfStmt stmt)
@@ -252,11 +283,11 @@ namespace ABJAD.InterpretEngine
             var condition = (bool)Evaluate(stmt.Condition);
             if (condition)
             {
-                ExecuteBlock(stmt.IfBlock, environment);
+                return ExecuteBlock(stmt.IfBlock, environment);
             }
             else if(stmt.ElseBlock != null)
             {
-                ExecuteBlock(stmt.ElseBlock, environment);
+                return ExecuteBlock(stmt.ElseBlock, environment);
             }
 
             return null;
@@ -310,19 +341,20 @@ namespace ABJAD.InterpretEngine
 
         public static object ExecuteBlock(Statement.BlockStmt block, Environment env)
         {
+            var localInterpret = new Interpreter(Writer, env);
             foreach (var binding in block.BindingList)
             {
-                var localInterpret = new Interpreter(Writer, env);
                 var result = binding.Accept(localInterpret);
 
-                if (bindingIsReturn(binding)) return result;
+                if (result != null || bindingIsReturn(binding)) return result;
             }
 
             return null;
         }
 
-        public static void AddParamsToScope(List<Expression> parametersDef, List<Expression> parameters, Environment scope)
+        public static void AddParamsToScope(List<Expression> parametersDef, List<object> parameters, Environment scope)
         {
+            //var localInterpreter = new Interpreter(Writer, scope, true);
             for (int i = 0; i < parametersDef.Count; i++)
             {
                 // We want to get the parameter name from the funcion decaration to make it our key
@@ -332,8 +364,8 @@ namespace ABJAD.InterpretEngine
                 var defPrimitive = defPrimtiveExpr?.Primitive as Primitive.Identifier;
                 var paramName = defPrimitive?.value;
 
-                var localInterpreter = new Interpreter(Writer, scope, true);
-                var paramValue = localInterpreter.Evaluate(parameters[i]);
+                var paramValue = parameters[i];
+                //var paramValue = localInterpreter.Evaluate(parameters[i]);
 
                 scope.Set(paramName, paramValue);
             }

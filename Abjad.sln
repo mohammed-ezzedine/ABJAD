@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ABJAD.Models", "ABJAD.Model
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ABJAD.IO", "ABJAD.IO\ABJAD.IO.csproj", "{4907B8B6-E56A-40D8-A5BF-DE1E1603B5DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABJAD", "ABJAD\ABJAD.csproj", "{061836ED-EA02-4905-BC55-3C1F18CB4703}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ABJAD", "ABJAD\ABJAD.csproj", "{061836ED-EA02-4905-BC55-3C1F18CB4703}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ABJAD.InterpretEngine", "ABJAD.InterpretEngine\ABJAD.InterpretEngine.csproj", "{1553A181-2428-46AB-BA34-2573C0308B75}"
 EndProject
@@ -27,6 +27,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{4C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{66DA8BAB-B431-4C61-B3AD-1784BD11E59E}"
 	ProjectSection(SolutionItems) = preProject
+		recursive-factorial.abjad = recursive-factorial.abjad
+		Test\ParserUnitTest\recursive-fibonacci.abjad = Test\ParserUnitTest\recursive-fibonacci.abjad
+		recursive-power.abjad = recursive-power.abjad
 		Test\test1.abjad = Test\test1.abjad
 		Test\test2.abjad = Test\test2.abjad
 		Test\test3.abjad = Test\test3.abjad
@@ -35,13 +38,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{66DA8BAB-B
 		Test\test6.abjad = Test\test6.abjad
 		Test\test7.abjad = Test\test7.abjad
 		Test\test8.abjad = Test\test8.abjad
+		test9.abjad = test9.abjad
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LexerUnitTest", "Test\LexerUnitTest\LexerUnitTest.csproj", "{F851CE30-19F9-40F3-A703-10A7A2B67FAC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParserUnitTest", "Test\ParserUnitTest\ParserUnitTest.csproj", "{03AD2547-8089-4FBA-90AA-32B6FBEAF6A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterpreterUnitTest", "Test\InterpreterUnitTest\InterpreterUnitTest.csproj", "{EF1418A8-240B-4F48-9D92-0BD3DBA78564}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterpreterUnitTest", "Test\InterpreterUnitTest\InterpreterUnitTest.csproj", "{EF1418A8-240B-4F48-9D92-0BD3DBA78564}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

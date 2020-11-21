@@ -10,16 +10,18 @@ namespace ABJAD.InterpretEngine
         public AbjadFunction(Declaration.FuncDecl declaration, Environment environment)
         {
             Declaration = declaration;
-            this.environment = environment.Clone() as Environment;
+            this.environment = environment;
+            this.environment.Set(declaration.Name.Text, this);
         }
 
         public Declaration.FuncDecl Declaration { get; set; }
 
-        public object Call(List<Expression> parameters)
+        public object Call(List<object> parameters)
         {
-            Interpreter.AddParamsToScope(Declaration.Parameters, parameters, environment);
+            var env = environment.Clone() as Environment;
+            Interpreter.AddParamsToScope(Declaration.Parameters, parameters, env);
 
-            return Interpreter.ExecuteBlock(Declaration.Block, environment);
+            return Interpreter.ExecuteBlock(Declaration.Block, env);
         }
     }
 }
