@@ -20,7 +20,11 @@ namespace ABJAD.InterpretEngine
         {
             Interpreter.AddParamsToScope(Declaration.Parameters, parameters, environment);
 
-            return Interpreter.ExecuteBlock(Declaration.Block, environment);
+            var result= Interpreter.ExecuteBlock(Declaration.Block, environment);
+            if (result is AbjadReturn r)
+                return r.value;
+
+            return result;
         }
     }
 }

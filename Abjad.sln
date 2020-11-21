@@ -27,10 +27,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{4C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{66DA8BAB-B431-4C61-B3AD-1784BD11E59E}"
 	ProjectSection(SolutionItems) = preProject
+		animal.abjad = animal.abjad
 		person.abjad = person.abjad
 		recursive-factorial.abjad = recursive-factorial.abjad
 		Test\ParserUnitTest\recursive-fibonacci.abjad = Test\ParserUnitTest\recursive-fibonacci.abjad
 		recursive-power.abjad = recursive-power.abjad
+		return.abjad = return.abjad
 		Test\test1.abjad = Test\test1.abjad
 		Test\test2.abjad = Test\test2.abjad
 		Test\test3.abjad = Test\test3.abjad

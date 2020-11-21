@@ -15,6 +15,8 @@ namespace ABJAD.InterpretEngine
         Statement.Visitor<object>
     {
         private Environment environment;
+        private bool _return = false;
+        private object _returned;
 
         public Interpreter(Writer writer, Environment environment, bool referenceScope = false)
         {
@@ -319,7 +321,14 @@ namespace ABJAD.InterpretEngine
 
         public object VisitBlockStmt(Statement.BlockStmt stmt) => ExecuteBlock(stmt, environment);
 
-        public object VisitReturnStmt(Statement.ReturnStmt stmt) => Evaluate(stmt.Expr);
+        public object VisitReturnStmt(Statement.ReturnStmt stmt)
+        {
+            _returned = Evaluate(stmt.Expr);
+            _return = true;
+            environment._return = true;
+            environment._returned = _returned;
+            return new AbjadReturn(_returned);
+        }
 
         public object VisitAssignmentStmt(Statement.AssignmentStmt stmt)
         {
@@ -339,12 +348,22 @@ namespace ABJAD.InterpretEngine
 
         public static object ExecuteBlock(Statement.BlockStmt block, Environment env)
         {
+            env._return = false;
+            env._returned = null;
+            //env.Set("_return", false);
+            //env.Set("_returned", null);
+
             var localInterpret = new Interpreter(Writer, env);
+            localInterpret._return = false;
+            localInterpret._returned = null;
             foreach (var binding in block.BindingList)
             {
                 var result = binding.Accept(localInterpret);
 
-                if (result != null || bindingIsReturn(binding)) return result;
+                if (result is AbjadReturn)
+                {
+                    return result;
+                }
             }
 
             return null;

@@ -14,6 +14,9 @@ namespace ABJAD.InterpretEngine
 
         private Environment parent_scope;
 
+        public bool _return { get; set; } = false;
+        public dynamic _returned { get; set; }
+
         public Environment()
         {
             environment = new Dictionary<string, dynamic>();
@@ -104,6 +107,6 @@ namespace ABJAD.InterpretEngine
                 || environment.ContainsKey(key)
                 || local_constants.ContainsKey(key)
                 || local_environment.ContainsKey(key); ;
-        }
+        } 
     }
 }
