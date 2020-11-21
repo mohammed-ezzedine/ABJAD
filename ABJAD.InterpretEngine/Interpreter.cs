@@ -141,9 +141,7 @@ namespace ABJAD.InterpretEngine
             }
 
             var parameters = expr.Parameters.Select(p => Evaluate(p)).ToList();
-            //var env = environment.Clone() as Environment;
             
-            //return abjadFunc.Call(expr.Parameters);
             return abjadFunc.Call(parameters);
         }
 
@@ -334,7 +332,7 @@ namespace ABJAD.InterpretEngine
         public object VisitPrintStmt(Statement.PrintStmt stmt)
         {
             var val = Evaluate(stmt.Expr);
-            var edited = val.ToString().Replace("True", "صحيح").Replace("False", "خطأ").Replace("null", "عدم");
+            var edited = val == null? "عدم" : val.ToString().Replace("True", "صحيح").Replace("False", "خطأ").Replace("null", "عدم");
             Writer.Write(edited);
             return null;
         }
@@ -354,7 +352,6 @@ namespace ABJAD.InterpretEngine
 
         public static void AddParamsToScope(List<Expression> parametersDef, List<object> parameters, Environment scope)
         {
-            //var localInterpreter = new Interpreter(Writer, scope, true);
             for (int i = 0; i < parametersDef.Count; i++)
             {
                 // We want to get the parameter name from the funcion decaration to make it our key
@@ -365,8 +362,6 @@ namespace ABJAD.InterpretEngine
                 var paramName = defPrimitive?.value;
 
                 var paramValue = parameters[i];
-                //var paramValue = localInterpreter.Evaluate(parameters[i]);
-
                 scope.Set(paramName, paramValue);
             }
         }

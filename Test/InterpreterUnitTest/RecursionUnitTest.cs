@@ -10,7 +10,7 @@ namespace InterpreterUnitTest
     class RecursionUnitTest
     {
         [Test]
-        public void Interpreting_Recursion_2Power10()
+        public void Interpreting_Recursion_2Power9()
         {
             var binDir = Directory.GetCurrentDirectory();
             var rootDir = Directory.GetParent(binDir).Parent.Parent.Parent.FullName;

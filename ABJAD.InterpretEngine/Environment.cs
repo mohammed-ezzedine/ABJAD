@@ -9,16 +9,27 @@ namespace ABJAD.InterpretEngine
         private Dictionary<string, dynamic> environment;
         private Dictionary<string, dynamic> constants;
 
-        public Environment(Dictionary<string, dynamic> environment, Dictionary<string, dynamic> constants)
-        {
-            this.environment = environment;
-            this.constants = constants;
-        }
+        private Dictionary<string, dynamic> local_environment;
+        private Dictionary<string, dynamic> local_constants;
+
+        private Environment parent_scope;
 
         public Environment()
         {
             environment = new Dictionary<string, dynamic>();
             constants = new Dictionary<string, dynamic>();
+            local_environment = new Dictionary<string, dynamic>();
+            local_constants = new Dictionary<string, dynamic>();
+            parent_scope = null;
+        }
+
+        private Environment(Environment parent, Dictionary<string, dynamic> env, Dictionary<string, dynamic> consts)
+        {
+            parent_scope = parent;
+            environment = env;
+            constants = consts;
+            local_environment = new Dictionary<string, dynamic>();
+            local_constants = new Dictionary<string, dynamic>();
         }
 
         public object Clone()
@@ -29,17 +40,28 @@ namespace ABJAD.InterpretEngine
             {
                 consts[key] = constants[key];
             }
+            foreach (var key in local_constants.Keys)
+            {
+                consts[key] = local_constants[key];
+            }
             foreach (var key in environment.Keys)
             {
                 env[key] = environment[key];
             }
-            return new Environment(env, consts);
-            //return MemberwiseClone();
+            foreach (var key in local_environment.Keys)
+            {
+                env[key] = local_environment[key];
+            }
+            return new Environment(this, env, consts);
         }
 
         public dynamic Get(string key)
         {
-            if (constants.ContainsKey(key))
+            if (local_constants.ContainsKey(key))
+                return local_constants[key];
+            else if (local_environment.ContainsKey(key))
+                return local_environment[key];
+            else if (constants.ContainsKey(key))
                 return constants[key];
             else if (environment.ContainsKey(key))
                 return environment[key];
@@ -49,26 +71,39 @@ namespace ABJAD.InterpretEngine
 
         public void Set(string key, dynamic value)
         {
-            if (constants.ContainsKey(key))
+            if (constants.ContainsKey(key) || local_constants.ContainsKey(key))
                 throw new AbjadInterpretingException("Cannot change the value of a constant.");
 
-            environment[key] = value;
+            local_environment[key] = value;
+
+            if (environment.ContainsKey(key))
+            {
+                environment[key] = value;
+
+                if (parent_scope != null)
+                {
+                    parent_scope.Set(key, value);
+                }
+            }
         }
 
         public void SetConstant(string key, dynamic value)
         {
-            if (environment.ContainsKey(key))
+            if (environment.ContainsKey(key) || local_environment.ContainsKey(key))
                 throw new AbjadInterpretingException($"Variable with name {key} already exists.");
 
-            if (constants.ContainsKey(key))
+            if (constants.ContainsKey(key) || local_constants.ContainsKey(key))
                 throw new AbjadInterpretingException($"Constant with name {key} already exists.");
 
-            constants[key] = value;
+            local_constants[key] = value;
         }
 
         public bool ContainsKey(string key)
         {
-            return constants.ContainsKey(key) ^ environment.ContainsKey(key);
+            return constants.ContainsKey(key)
+                || environment.ContainsKey(key)
+                || local_constants.ContainsKey(key)
+                || local_environment.ContainsKey(key); ;
         }
     }
 }
