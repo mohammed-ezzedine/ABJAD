@@ -2,7 +2,7 @@
 
 namespace ABJAD.InterpretEngine
 {
-    public class AbjadInstance : AbjadObject<object>
+    public class AbjadInstance : AbjadObject
     {
         public AbjadInstance(Environment envrionment, Token type)
         {

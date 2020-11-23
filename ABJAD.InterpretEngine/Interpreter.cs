@@ -179,13 +179,13 @@ namespace ABJAD.InterpretEngine
 
         public object VisitUnaryExpr(Expression.UnaryExpr expr)
         {
-            var operand = Evaluate(expr.Operand);
+            var operand = Evaluate(expr.Operand) as AbjadObject;
             switch (expr.Operation.Type)
             {
                 case MINUS:
-                    return -1 * (double)operand;
+                    return operand.OperatorUMinus();
                 case BANG:
-                    return !(bool)operand;
+                    return operand.OperatorBang();
                 default:
                     throw new AbjadInterpretingException("Invalid unary expression.");
             }
@@ -193,58 +193,35 @@ namespace ABJAD.InterpretEngine
 
         public object VisitBinaryExpr(Expression.BinaryExpr expr)
         {
-            var oper1 = Evaluate(expr.Operand1);
-            var oper2 = Evaluate(expr.Operand2);
-
-            double d1;
-            double d2;
+            var oper1 = Evaluate(expr.Operand1) as AbjadObject;
+            var oper2 = Evaluate(expr.Operand2) as AbjadObject;
 
             switch (expr.Operation.Type)
             {
                 case AND:
-                    return (bool)oper1 && (bool)oper2;
+                    return oper1.OperatorAnd(oper2);
                 case OR:
-                    return (bool)oper1 || (bool)oper2;
+                    return oper1.OperatorOr(oper2);
                 case BANG_EQUAL:
-                    return !oper1.Equals(oper2);
+                    return new AbjadBool(!(bool)oper1.OperatorEqual(oper2).Value);
                 case EQUAL_EQUAL:
-                    return oper1.Equals(oper2);
+                    return oper1.OperatorEqual(oper2);
                 case DIVIDED_BY:
-                    return (double)oper1 / (double)oper2;
+                    return oper1.OperatorDiviededBy(oper2);
                 case GREATER_EQUAL:
-                    if (double.TryParse(oper1.ToString(), out d1) && double.TryParse(oper2.ToString(), out d2))
-                    {
-                        return d1 >= d2;
-                    }
-                    return oper1.ToString().CompareTo(oper2.ToString()) >= 0;
+                    return oper1.OperatorGreaterEqual(oper2);
                 case GREATER_THAN:
-                    if (double.TryParse(oper1.ToString(), out d1) && double.TryParse(oper2.ToString(), out d2))
-                    {
-                        return d1 > d2;
-                    }
-                    return oper1.ToString().CompareTo(oper2.ToString()) > 0;
+                    return oper1.OperatorGreaterThan(oper2);
                 case LESS_EQUAL:
-                    if (double.TryParse(oper1.ToString(), out d1) && double.TryParse(oper2.ToString(), out d2))
-                    {
-                        return d1 <= d2;
-                    }
-                    return oper1.ToString().CompareTo(oper2.ToString()) <= 0;
+                    return oper1.OperatorLessEqual(oper2);
                 case LESS_THAN:
-                    if (double.TryParse(oper1.ToString(), out d1) && double.TryParse(oper2.ToString(), out d2))
-                    {
-                        return d1 < d2;
-                    }
-                    return oper1.ToString().CompareTo(oper2.ToString()) < 0;
+                    return oper1.OperatorLessThan(oper2);
                 case MINUS:
-                    return (double)oper1 - (double)oper2;
+                    return oper1.OperatorMinus(oper2);
                 case PLUS:
-                    if (double.TryParse(oper1.ToString(), out d1) && double.TryParse(oper2.ToString(), out d2))
-                    {
-                        return d1 + d2;
-                    }
-                    return oper1.ToString() + oper2.ToString();
+                    return oper1.OperatorPlus(oper2);
                 case TIMES:
-                    return (double)oper1 * (double)oper2;
+                    return oper1.OperatorTimes(oper2);
                 default:
                     throw new AbjadInterpretingException("Invalid binary expression.");
             }
@@ -260,13 +237,13 @@ namespace ABJAD.InterpretEngine
             return expr.Primitive.Accept(this);
         }
 
-        public object VisitNumberConst(Primitive.NumberConst numberConst) => numberConst.value;
+        public object VisitNumberConst(Primitive.NumberConst numberConst) => new AbjadNumber(numberConst.value);
 
-        public object VisitStringConst(Primitive.StringConst stringConst) => stringConst.value;
+        public object VisitStringConst(Primitive.StringConst stringConst) => new AbjadString(stringConst.value);
 
-        public object VisitTrue(Primitive.True @true) => true;
+        public object VisitTrue(Primitive.True @true) => new AbjadBool(true);
 
-        public object VisitFalse(Primitive.False @false) => false;
+        public object VisitFalse(Primitive.False @false) => new AbjadBool(false);
 
         public object VisitNull(Primitive.Null @null) => null;
 
@@ -280,10 +257,10 @@ namespace ABJAD.InterpretEngine
 
         public object VisitIfStmt(Statement.IfStmt stmt)
         {
-            var condition = (bool)Evaluate(stmt.Condition);
-            if (condition)
+            var conditionObj = Evaluate(stmt.Condition) as AbjadBool;
+            if ((bool)conditionObj.Value)
             {
-                return ExecuteBlock(stmt.IfBlock, environment);
+                return ExecuteBlock(stmt.IfBlock, environment);         // TODO: check whether the return is necessary
             }
             else if(stmt.ElseBlock != null)
             {
@@ -295,11 +272,11 @@ namespace ABJAD.InterpretEngine
 
         public object VisitWhileStmt(Statement.WhileStmt stmt)
         {
-            var condition = (bool)Evaluate(stmt.Condition);
-            while (condition)
+            var conditionObj = Evaluate(stmt.Condition) as AbjadBool;
+            while ((bool)conditionObj.Value)
             {
                 ExecuteBlock(stmt.Block, environment);
-                condition = (bool)Evaluate(stmt.Condition);
+                conditionObj = Evaluate(stmt.Condition) as AbjadBool;
             }
 
             return null;
@@ -308,12 +285,12 @@ namespace ABJAD.InterpretEngine
         public object VisitForStmt(Statement.ForStmt stmt)
         {
             stmt.Declaration.Accept(this);
-            var condition = (bool)Evaluate(stmt.Condition);
-            while (condition)
+            var conditionObj = Evaluate(stmt.Condition) as AbjadBool;
+            while ((bool)conditionObj.Value)
             {
                 ExecuteBlock(stmt.Block, environment);
                 stmt.Assignment.Accept(this);
-                condition = (bool)Evaluate(stmt.Condition);
+                conditionObj = Evaluate(stmt.Condition) as AbjadBool;
             }
 
             return null;
@@ -321,7 +298,7 @@ namespace ABJAD.InterpretEngine
 
         public object VisitBlockStmt(Statement.BlockStmt stmt) => ExecuteBlock(stmt, environment);
 
-        public object VisitReturnStmt(Statement.ReturnStmt stmt)
+        public object VisitReturnStmt(Statement.ReturnStmt stmt)        // TODO: get rid of the unneeded global variables
         {
             _returned = Evaluate(stmt.Expr);
             _return = true;
@@ -340,8 +317,8 @@ namespace ABJAD.InterpretEngine
 
         public object VisitPrintStmt(Statement.PrintStmt stmt)
         {
-            var val = Evaluate(stmt.Expr);
-            var edited = val == null? "عدم" : val.ToString().Replace("True", "صحيح").Replace("False", "خطأ").Replace("null", "عدم");
+            var val = Evaluate(stmt.Expr) as AbjadObject;
+            var edited = val == null? "عدم" : val.ToStr().Value as string;
             Writer.Write(edited);
             return null;
         }
