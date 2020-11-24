@@ -31,6 +31,10 @@
     PRINT	            =	اكتب
     RETURN              =   ارجع
     SEMICOLON           =   ؛
+    STRING              =   مقطع
+    NUMBER              =   رقم
+    BOOL                =   منطق
+    TYPEOF              =   نوع
     STRING_CONST        =   
     TIMES               =   *
     TRUE                =   صحيح

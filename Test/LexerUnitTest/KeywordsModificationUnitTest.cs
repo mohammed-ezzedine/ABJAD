@@ -74,5 +74,93 @@ namespace LexerUnitTest
 
             Assert.NotNull(elseToken);
         }
+
+        [Test]
+        public void Lexing_StringToken_Syntax()
+        {
+            var code = "مقطع؛";
+            var lexer = new Lexer(code);
+            var tokens = lexer.Lex();
+
+            Assert.AreEqual(TokenType.STRING, tokens[0].Type);
+        }
+
+        [Test]
+        public void Lexing_StringToken_Syntax1()
+        {
+            var code = "أكتب(مقطع(3))؛";
+            var lexer = new Lexer(code);
+            var tokens = lexer.Lex();
+            var stringToken = tokens
+                .SingleOrDefault(t => t.Type == TokenType.STRING);
+
+            Assert.NotNull(stringToken);
+        }
+
+        [Test]
+        public void Lexing_NumberToken_Syntax()
+        {
+            var code = "رقم؛";
+            var lexer = new Lexer(code);
+            var tokens = lexer.Lex();
+
+            Assert.AreEqual(TokenType.NUMBER, tokens[0].Type);
+        }
+
+        [Test]
+        public void Lexing_NumberToken_Syntax1()
+        {
+            var code = "أكتب(رقم(\"3\"))؛";
+            var lexer = new Lexer(code);
+            var tokens = lexer.Lex();
+            var numberToken = tokens
+                .SingleOrDefault(t => t.Type == TokenType.NUMBER);
+
+            Assert.NotNull(numberToken);
+        }
+
+        [Test]
+        public void Lexing_BoolToken_Syntax()
+        {
+            var code = "منطق؛";
+            var lexer = new Lexer(code);
+            var tokens = lexer.Lex();
+
+            Assert.AreEqual(TokenType.BOOL, tokens[0].Type);
+        }
+
+        [Test]
+        public void Lexing_BoolToken_Syntax1()
+        {
+            var code = "أكتب(منطق(\"صحيح\"))؛";
+            var lexer = new Lexer(code);
+            var tokens = lexer.Lex();
+            var boolToken = tokens
+                .SingleOrDefault(t => t.Type == TokenType.BOOL);
+
+            Assert.NotNull(boolToken);
+        }
+
+        [Test]
+        public void Lexing_TypeofToken_Syntax()
+        {
+            var code = "نوع؛";
+            var lexer = new Lexer(code);
+            var tokens = lexer.Lex();
+
+            Assert.AreEqual(TokenType.TYPEOF, tokens[0].Type);
+        }
+
+        [Test]
+        public void Lexing_TypeofToken_Syntax1()
+        {
+            var code = "أكتب(نوع(صحيح))؛";
+            var lexer = new Lexer(code);
+            var tokens = lexer.Lex();
+            var typeToken = tokens
+                .SingleOrDefault(t => t.Type == TokenType.TYPEOF);
+
+            Assert.NotNull(typeToken);
+        }
     }
 }

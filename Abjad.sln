@@ -33,6 +33,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{66DA8BAB-B
 		Test\ParserUnitTest\recursive-fibonacci.abjad = Test\ParserUnitTest\recursive-fibonacci.abjad
 		recursive-power.abjad = recursive-power.abjad
 		return.abjad = return.abjad
+		string-operations.abjad = string-operations.abjad
 		Test\test1.abjad = Test\test1.abjad
 		Test\test2.abjad = Test\test2.abjad
 		Test\test3.abjad = Test\test3.abjad
