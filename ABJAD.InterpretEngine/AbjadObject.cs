@@ -7,7 +7,6 @@ namespace ABJAD.InterpretEngine
     {
         رقم,        // double
         مقطع,       // string
-        حرف,        // char
         منطقي,      // bool
         خاص         // User Defined Type
     }
@@ -109,6 +108,7 @@ namespace ABJAD.InterpretEngine
         public AbjadString(string str)
         {
             Value = str;
+            Type = AbjadType.مقطع;
         }
 
         public override AbjadObject OperatorPlus(AbjadObject other)
@@ -152,6 +152,7 @@ namespace ABJAD.InterpretEngine
         public AbjadNumber(double number)
         {
             Value = number;
+            Type = AbjadType.رقم;
         }
 
         public AbjadNumber(object number)
@@ -215,6 +216,7 @@ namespace ABJAD.InterpretEngine
         public AbjadBool(bool boolean)
         {
             Value = boolean;
+            Type = AbjadType.منطقي;
         }
 
         public override AbjadBool OperatorAnd(AbjadObject other)

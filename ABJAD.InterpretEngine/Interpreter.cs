@@ -1,5 +1,6 @@
 ﻿using ABJAD.IO;
 using ABJAD.Models.Exceptions;
+using ABJAD.Models.Exceptions.InterpretingExceptions;
 using ABJAD.ParseEngine;
 using System.Collections.Generic;
 using System.Linq;
@@ -237,6 +238,50 @@ namespace ABJAD.InterpretEngine
             return expr.Primitive.Accept(this);
         }
 
+        public object VisitToStrExpr(Expression.ToStrExpr expr)
+        {
+            var inputObj = Evaluate(expr.Input) as AbjadObject;
+            if (inputObj == null)
+            {
+                throw new AbjadCastingException("string");
+            }
+
+            return inputObj.ToStr();
+        }
+
+        public object VisitToNumberExpr(Expression.ToNumberExpr expr)
+        {
+            var inputObj = Evaluate(expr.Input) as AbjadObject;
+            if (inputObj == null)
+            {
+                throw new AbjadCastingException("string");
+            }
+
+            return inputObj.ToNumber();
+        }
+
+        public object VisitToBoolExpr(Expression.ToBoolExpr expr)
+        {
+            var inputObj = Evaluate(expr.Input) as AbjadObject;
+            if (inputObj == null)
+            {
+                throw new AbjadCastingException("string");
+            }
+
+            return inputObj.ToBool();
+        }
+
+        public object VisitTypeofExpr(Expression.TypeofExpr expr)
+        {
+            var inputObj = Evaluate(expr.Input) as AbjadObject;
+            if (inputObj == null)
+            {
+                throw new AbjadCastingException("string");
+            }
+
+            return inputObj.GetType();
+        }
+
         public object VisitNumberConst(Primitive.NumberConst numberConst) => new AbjadNumber(numberConst.value);
 
         public object VisitStringConst(Primitive.StringConst stringConst) => new AbjadString(stringConst.value);
@@ -391,7 +436,7 @@ namespace ABJAD.InterpretEngine
             return false;
         }
 
-        private static bool bindingIsReturn(Binding binding)
+        private static bool bindingIsReturn(Binding binding)                        // TODO: Remove
         {
             var stmt = binding as Binding.StmtBinding;
             if (stmt != null)

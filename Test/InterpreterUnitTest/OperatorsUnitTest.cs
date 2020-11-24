@@ -34,5 +34,31 @@ namespace InterpreterUnitTest
             var output = File.ReadAllText(outputPath);
             Assert.AreEqual(expectedOutput, output);
         }
+
+        [Test]
+        public void Interpreting_StringOperators_Output()
+        {
+            var binDir = Directory.GetCurrentDirectory();
+            var rootDir = Directory.GetParent(binDir).Parent.Parent.Parent.FullName;
+            var dir = Path.Combine(rootDir, "string-operations.abjad");
+
+            var outputPath = Path.Combine(rootDir, "string-operations.txt");
+
+            var code = Reader.Read(dir);
+
+            var lexer = new Lexer(code);
+            var tokens = lexer.Lex();
+
+            var parser = new Parser(tokens);
+            var bindings = parser.Parse();
+
+            var writer = new Writer(outputPath);
+            var interpreter = new Interpreter(writer);
+            interpreter.Interpret(bindings);
+
+            var expectedOutput = "صحيح\nصحيح\n";
+            var output = File.ReadAllText(outputPath);
+            Assert.AreEqual(expectedOutput, output);
+        }
     }
 }

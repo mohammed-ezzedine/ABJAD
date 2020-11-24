@@ -9,8 +9,6 @@ namespace ABJAD.ParseEngine
     public class Parser
     {
         private readonly List<TokenType> declarationTokens = new List<TokenType> { CLASS, CONST, FUNC, VAR };
-        private readonly List<TokenType> binaryOperations = new List<TokenType> { AND, BANG_EQUAL, DIVIDED_BY, EQUAL_EQUAL, GREATER_EQUAL,
-            GREATER_THAN, LESS_EQUAL, LESS_THAN, MINUS, OR, PLUS, TIMES };
         private readonly List<Token> tokens;
         private List<Binding> program;
 
@@ -357,6 +355,10 @@ namespace ABJAD.ParseEngine
             if (Match(NEW)) return InstExpr();
             if (Match(ID) && Match(1, DOT, OPEN_PAREN)) return CallExpr();
             if (Match(OPEN_PAREN)) return GroupExpr();
+            if (Match(STRING)) return ToStrExpr();
+            if (Match(NUMBER)) return ToNumberExpr();
+            if (Match(BOOL)) return ToBoolExpr();
+            if (Match(TYPEOF)) return TypeofExpr();
 
             var primitive = Primitive();
             return new Expression.PrimitiveExpr(primitive);
@@ -438,6 +440,46 @@ namespace ABJAD.ParseEngine
             Consume(CLOSE_PAREN, "')' was expected.");
 
             return new Expression.GroupExpr(expr);
+        }
+
+        private Expression ToStrExpr()
+        {
+            Consume(STRING, "Invalid cast syntax");
+            Consume(OPEN_PAREN, "'(' was expected.");
+            var expr = Expression();
+            Consume(CLOSE_PAREN, "')' was expected.");
+
+            return new Expression.ToStrExpr(expr);
+        }
+
+        private Expression ToNumberExpr()
+        {
+            Consume(NUMBER, "Invalid cast syntax");
+            Consume(OPEN_PAREN, "'(' was expected.");
+            var expr = Expression();
+            Consume(CLOSE_PAREN, "')' was expected.");
+
+            return new Expression.ToNumberExpr(expr);
+        }
+
+        private Expression ToBoolExpr()
+        {
+            Consume(BOOL, "Invalid cast syntax");
+            Consume(OPEN_PAREN, "'(' was expected.");
+            var expr = Expression();
+            Consume(CLOSE_PAREN, "')' was expected.");
+
+            return new Expression.ToBoolExpr(expr);
+        }
+
+        private Expression TypeofExpr()
+        {
+            Consume(TYPEOF, "Invalid type syntax");
+            Consume(OPEN_PAREN, "'(' was expected.");
+            var expr = Expression();
+            Consume(CLOSE_PAREN, "')' was expected.");
+
+            return new Expression.TypeofExpr(expr);
         }
 
         private Binding Binding()

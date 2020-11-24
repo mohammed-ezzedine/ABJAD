@@ -18,6 +18,7 @@ namespace ABJAD.LexEngine
 
         private static readonly Dictionary<string, TokenType> Keywords = new Dictionary<string, TokenType>
         {
+            { "منطق", BOOL },
             { "صنف", CLASS },
             { "ثابت", CONST },
             { "والا", ELSE },
@@ -27,9 +28,12 @@ namespace ABJAD.LexEngine
             { "اذا", IF },
             { "انشئ", NEW },
             { "عدم", NULL },
+            { "رقم", NUMBER },
             { "اكتب", PRINT },
             { "ارجع", RETURN },
+            { "مقطع", STRING },
             { "صحيح", TRUE },
+            { "نوع", TYPEOF },
             { "طالما", WHILE },
             { "متغير", VAR },
         };

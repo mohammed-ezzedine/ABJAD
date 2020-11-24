@@ -13,6 +13,14 @@ namespace ABJAD.ParseEngine
 
             T VisitInstExpr(InstExpr expr);
 
+            T VisitToStrExpr(ToStrExpr expr);
+
+            T VisitToNumberExpr(ToNumberExpr expr);
+
+            T VisitToBoolExpr(ToBoolExpr expr);
+
+            T VisitTypeofExpr(TypeofExpr expr);
+
             T VisitUnaryExpr(UnaryExpr expr);
 
             T VisitBinaryExpr(BinaryExpr expr);
@@ -78,6 +86,66 @@ namespace ABJAD.ParseEngine
             public override T Accept<T>(IVisitor<T> visitor)
             {
                 return visitor.VisitInstExpr(this);
+            }
+        }
+
+        public class ToStrExpr : Expression
+        {
+            public ToStrExpr(Expression input)
+            {
+                Input = input;
+            }
+
+            public Expression Input { get; set; }
+
+            public override T Accept<T>(IVisitor<T> visitor)
+            {
+                return visitor.VisitToStrExpr(this);
+            }
+        }
+
+        public class ToNumberExpr : Expression
+        {
+            public ToNumberExpr(Expression input)
+            {
+                Input = input;
+            }
+
+            public Expression Input { get; set; }
+
+            public override T Accept<T>(IVisitor<T> visitor)
+            {
+                return visitor.VisitToNumberExpr(this);
+            }
+        }
+
+        public class ToBoolExpr : Expression
+        {
+            public ToBoolExpr(Expression input)
+            {
+                Input = input;
+            }
+
+            public Expression Input { get; set; }
+
+            public override T Accept<T>(IVisitor<T> visitor)
+            {
+                return visitor.VisitToBoolExpr(this);
+            }
+        }
+
+        public class TypeofExpr : Expression
+        {
+            public TypeofExpr(Expression input)
+            {
+                Input = input;
+            }
+
+            public Expression Input { get; set; }
+
+            public override T Accept<T>(IVisitor<T> visitor)
+            {
+                return visitor.VisitTypeofExpr(this);
             }
         }
 

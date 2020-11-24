@@ -14,7 +14,7 @@
                         |   block_stmt
                         |   return_stmt
                         |   assignment_stmt 
-                        |   print_stmt 
+                        |   print_stmt
                         |   comment_stmt;
 
     declaration         →   FUNC ID OPEN_PAREN parameter_list CLOSE_PAREN block_stmt
@@ -49,6 +49,10 @@
     expression          →   call_expr
                         |   instant_expr
                         |   oper_expr
+                        |   to_str_expr
+                        |   to_number_expr
+                        |   to_bool_expr
+                        |   type_expr
                         |   primitive 
                         |   OPEN_PAREN expression CLOSE_PAREN ;
 
@@ -59,6 +63,14 @@
                         |   ID OPEN_PAREN parameter_list CLOSE_PAREN SEMICOLON ;
 
     instant_expr        →   NEW ID OPEN_PAREN parameter_List CLOSE_PAREN ;
+
+    to_str_expr         →   STRING OPEN_PAREN expression CLOSE_PAREN SEMICOLON ;
+
+    to_number_expr      →   NUMBER OPEN_PAREN expression CLOSE_PAREN SEMICOLON ;
+
+    to_bool_expr        →   BOOL OPEN_PAREN expression CLOSE_PAREN SEMICOLON ;
+
+    type_stmt           →   TYPEOF OPEN_PAREN expression CLOSE_PAREN SEMICOLON ;
 
     oper_expr           →   expression PLUS expression
                         |   expression MINUS expression
