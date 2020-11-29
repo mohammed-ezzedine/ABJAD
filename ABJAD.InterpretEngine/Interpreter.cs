@@ -18,8 +18,6 @@ namespace ABJAD.InterpretEngine
         Statement.Visitor<object>
     {
         private Environment environment;
-        private bool _return = false;
-        private object _returned;
 
         public Interpreter(Writer writer, Environment environment, bool referenceScope = false)
         {
@@ -313,7 +311,7 @@ namespace ABJAD.InterpretEngine
             var conditionObj = Evaluate(stmt.Condition) as AbjadBool;
             if ((bool)conditionObj.Value)
             {
-                return ExecuteBlock(stmt.IfBlock, environment);         // TODO: check whether the return is necessary
+                return ExecuteBlock(stmt.IfBlock, environment);
             }
             else if(stmt.ElseBlock != null)
             {
@@ -351,14 +349,8 @@ namespace ABJAD.InterpretEngine
 
         public object VisitBlockStmt(Statement.BlockStmt stmt) => ExecuteBlock(stmt, environment);
 
-        public object VisitReturnStmt(Statement.ReturnStmt stmt)        // TODO: get rid of the unneeded global variables
-        {
-            _returned = Evaluate(stmt.Expr);
-            _return = true;
-            environment._return = true;
-            environment._returned = _returned;
-            return new AbjadReturn(_returned);
-        }
+        public object VisitReturnStmt(Statement.ReturnStmt stmt)
+            => new AbjadReturn(Evaluate(stmt.Expr));
 
         public object VisitAssignmentStmt(Statement.AssignmentStmt stmt)
         {
@@ -378,14 +370,7 @@ namespace ABJAD.InterpretEngine
 
         public static object ExecuteBlock(Statement.BlockStmt block, Environment env)
         {
-            env._return = false;
-            env._returned = null;
-            //env.Set("_return", false);
-            //env.Set("_returned", null);
-
             var localInterpret = new Interpreter(Writer, env);
-            localInterpret._return = false;
-            localInterpret._returned = null;
             foreach (var binding in block.BindingList)
             {
                 var result = binding.Accept(localInterpret);
@@ -441,18 +426,6 @@ namespace ABJAD.InterpretEngine
             }
 
             funcDecl = null;
-            return false;
-        }
-
-        private static bool bindingIsReturn(Binding binding)                        // TODO: Remove
-        {
-            var stmt = binding as Binding.StmtBinding;
-            if (stmt != null)
-            {
-                var returnStmt = stmt.Stmt as Statement.ReturnStmt;
-                if (returnStmt != null) return true;
-            }
-
             return false;
         }
     }

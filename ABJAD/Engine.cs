@@ -3,6 +3,7 @@ using ABJAD.IO;
 using ABJAD.LexEngine;
 using ABJAD.Models.Exceptions;
 using CommandLine;
+using System;
 
 namespace ABJAD
 {
@@ -46,6 +47,7 @@ namespace ABJAD
             }
             catch (AbjadException e)
             {
+                Console.WriteLine(e.EnglishMessage);
                 writer.Write(e.ArabicMessage);
             }
         }
