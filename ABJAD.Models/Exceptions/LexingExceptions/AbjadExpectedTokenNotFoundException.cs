@@ -4,10 +4,10 @@ namespace ABJAD.Models.Exceptions
 {
     public class AbjadExpectedTokenNotFoundException : AbjadLexingException
     {
-        public AbjadExpectedTokenNotFoundException(int line, string token) 
+        public AbjadExpectedTokenNotFoundException(string token, int line, int index) 
             : base(
-                  ErrorMessages.English.ExpectedToken(line, token),
-                  ErrorMessages.Arabic.ExpectedToken(line, token)
+                  ErrorMessages.English.ExpectedToken(token, line, index),
+                  ErrorMessages.Arabic.ExpectedToken(token, line, index)
             )
         {
         }

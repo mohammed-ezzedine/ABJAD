@@ -104,7 +104,9 @@ namespace ABJAD.ParseEngine
 
         private Declaration Class()
         {
-            var name = Consume(ID, ErrorMessages.English.ExpectedToken("class name"), ErrorMessages.Arabic.ExpectedToken("إسم الصنف"));
+            var name = Consume(ID, 
+                ErrorMessages.English.ExpectedToken("class name", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("إسم الصنف", GetLine(), GetIndex()));
 
             var block = Block();
             
@@ -113,13 +115,19 @@ namespace ABJAD.ParseEngine
 
         private Declaration Function()
         {
-            var name = Consume(ID, ErrorMessages.English.ExpectedToken("function name"), ErrorMessages.Arabic.ExpectedToken("إسم الدالة"));
+            var name = Consume(ID, 
+                ErrorMessages.English.ExpectedToken("function name", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("إسم الدالة", GetLine(), GetIndex()));
 
-            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
+            Consume(OPEN_PAREN, 
+                ErrorMessages.English.ExpectedToken("(", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("(", GetLine(), GetIndex()));
 
             var parameters = Parameters();
 
-            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
+            Consume(CLOSE_PAREN, 
+                ErrorMessages.English.ExpectedToken(")", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken(")", GetLine(), GetIndex()));
 
             var block = Block();
 
@@ -129,34 +137,46 @@ namespace ABJAD.ParseEngine
 
         private Declaration Constant()
         {
-            var name = Consume(ID, ErrorMessages.English.ExpectedToken("constant name"), ErrorMessages.Arabic.ExpectedToken("إسم الثابت"));
+            var name = Consume(ID, 
+                ErrorMessages.English.ExpectedToken("constant name", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("إسم الثابت", GetLine(), GetIndex()));
 
             Expression value = null;
             if (Peek()?.Type != SEMICOLON)
             {
-                Consume(EQUAL, ErrorMessages.English.UnassignedConst, ErrorMessages.Arabic.UnassignedConst);
+                Consume(EQUAL, 
+                    ErrorMessages.English.UnassignedConst(GetLine(), GetIndex()), 
+                    ErrorMessages.Arabic.UnassignedConst(GetLine(), GetIndex()));
 
                 value = Expression();
             }
 
-            Consume(SEMICOLON, ErrorMessages.English.ExpectedToken(";"), ErrorMessages.Arabic.ExpectedToken("؛"));
+            Consume(SEMICOLON, 
+                ErrorMessages.English.ExpectedToken(";", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("؛", GetLine(), GetIndex()));
 
             return new Declaration.ConstDecl(name, value);
         }
 
         private Declaration Variable()
         {
-            var name = Consume(ID, ErrorMessages.English.ExpectedToken("variable name"), ErrorMessages.Arabic.ExpectedToken("إسم المتغير"));
+            var name = Consume(ID, 
+                ErrorMessages.English.ExpectedToken("variable name", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("إسم المتغير", GetLine(), GetIndex()));
 
             Expression value = null;
             if (Peek()?.Type != SEMICOLON)
             {
-                Consume(EQUAL, ErrorMessages.English.UnassignedVar, ErrorMessages.Arabic.UnassignedVar);
+                Consume(EQUAL, 
+                    ErrorMessages.English.UnassignedVar(GetLine(), GetIndex()), 
+                    ErrorMessages.Arabic.UnassignedVar(GetLine(), GetIndex()));
 
                 value = Expression();
             }
 
-            Consume(SEMICOLON, ErrorMessages.English.ExpectedToken(";"), ErrorMessages.Arabic.ExpectedToken("؛"));
+            Consume(SEMICOLON, 
+                ErrorMessages.English.ExpectedToken(";", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("؛", GetLine(), GetIndex()));
 
             return new Declaration.VarDecl(name, value);
         }
@@ -164,19 +184,28 @@ namespace ABJAD.ParseEngine
         private Statement ExprStmt()
         {
             var expr = Expression();
-            Consume(SEMICOLON, ErrorMessages.English.ExpectedToken(";"), ErrorMessages.Arabic.ExpectedToken("؛"));
+            Consume(SEMICOLON, 
+                ErrorMessages.English.ExpectedToken(";", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("؛", GetLine(), GetIndex()));
 
             return new Statement.ExprStmt(expr);
         }
 
         private Statement IfStmt()
         {
-            Consume(IF, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
-            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
+            Consume(IF, 
+                ErrorMessages.English.InvalidSyntax(GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.InvalidSyntax(GetLine(), GetIndex()));
+
+            Consume(OPEN_PAREN, 
+                ErrorMessages.English.ExpectedToken("(", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("(", GetLine(), GetIndex()));
 
             var condition = Expression();
 
-            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
+            Consume(CLOSE_PAREN, 
+                ErrorMessages.English.ExpectedToken(")", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken(")", GetLine(), GetIndex()));
 
             Statement.BlockStmt ifBody = Block();
             Statement.BlockStmt elseBody = null;
@@ -192,10 +221,20 @@ namespace ABJAD.ParseEngine
 
         private Statement WhileStmt()
         {
-            Consume(WHILE, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
-            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
+            Consume(WHILE, 
+                ErrorMessages.English.InvalidSyntax(GetLine(), GetIndex()),
+                ErrorMessages.Arabic.InvalidSyntax(GetLine(), GetIndex()));
+
+            Consume(OPEN_PAREN, 
+                ErrorMessages.English.ExpectedToken("(", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("(", GetLine(), GetIndex()));
+
             var condition = Expression();
-            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
+            
+            Consume(CLOSE_PAREN, 
+                ErrorMessages.English.ExpectedToken(")", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken(")", GetLine(), GetIndex()));
+            
             var body = Block();
 
             return new Statement.WhileStmt(condition, body);
@@ -203,14 +242,31 @@ namespace ABJAD.ParseEngine
 
         private Statement ForStmt()
         {
-            Consume(FOR, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
-            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
-            Consume(VAR, ErrorMessages.English.ForLoopVar, ErrorMessages.Arabic.ForLoopVar);
+            Consume(FOR, 
+                ErrorMessages.English.InvalidSyntax(GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.InvalidSyntax(GetLine(), GetIndex()));
+
+            Consume(OPEN_PAREN, 
+                ErrorMessages.English.ExpectedToken("(", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("(", GetLine(), GetIndex()));
+
+            Consume(VAR, 
+                ErrorMessages.English.ForLoopVar(GetLine(), GetIndex()),
+                ErrorMessages.Arabic.ForLoopVar(GetLine(), GetIndex()));
+
             var declaration = Variable();
             var condition = Expression();
-            Consume(SEMICOLON, ErrorMessages.English.ExpectedToken(";"), ErrorMessages.Arabic.ExpectedToken("؛"));
+            
+            Consume(SEMICOLON, 
+                ErrorMessages.English.ExpectedToken(";", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("؛", GetLine(), GetIndex()));
+
             var assignment = Assignment();
-            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
+            
+            Consume(CLOSE_PAREN, 
+                ErrorMessages.English.ExpectedToken(")", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken(")", GetLine(), GetIndex()));
+
             var block = Block();
 
             return new Statement.ForStmt(block, assignment, condition, declaration);
@@ -218,9 +274,15 @@ namespace ABJAD.ParseEngine
 
         private Statement ReturnStmt()
         {
-            Consume(RETURN, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
+            Consume(RETURN, 
+                ErrorMessages.English.InvalidSyntax(GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.InvalidSyntax(GetLine(), GetIndex()));
+
             var expr = Expression();
-            Consume(SEMICOLON, ErrorMessages.English.ExpectedToken(";"), ErrorMessages.Arabic.ExpectedToken("؛"));
+            
+            Consume(SEMICOLON, 
+                ErrorMessages.English.ExpectedToken(";", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("؛", GetLine(), GetIndex()));
 
             return new Statement.ReturnStmt(expr);
         }
@@ -228,15 +290,23 @@ namespace ABJAD.ParseEngine
         private Statement AsstStmt()
         {
             var asst = Assignment();
-            Consume(SEMICOLON, ErrorMessages.English.ExpectedToken(";"), ErrorMessages.Arabic.ExpectedToken("؛"));
+            Consume(SEMICOLON, 
+                ErrorMessages.English.ExpectedToken(";", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("؛", GetLine(), GetIndex()));
 
             return asst;
         }
 
         private Statement.AssignmentStmt Assignment()
         {
-            var name = Consume(ID, ErrorMessages.English.ExpectedToken("variable name"), ErrorMessages.Arabic.ExpectedToken("إسم المتغير"));
-            Consume(EQUAL, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
+            var name = Consume(ID, 
+                ErrorMessages.English.ExpectedToken("variable name", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("إسم المتغير", GetLine(), GetIndex()));
+
+            Consume(EQUAL, 
+                ErrorMessages.English.InvalidSyntax(GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.InvalidSyntax(GetLine(), GetIndex()));
+
             var value = Expression();
 
             return new Statement.AssignmentStmt(name, value);
@@ -244,7 +314,9 @@ namespace ABJAD.ParseEngine
 
         private Statement.BlockStmt Block()
         {
-            Consume(OPEN_BRACE, ErrorMessages.English.ExpectedToken("{"), ErrorMessages.Arabic.ExpectedToken("{"));
+            Consume(OPEN_BRACE, 
+                ErrorMessages.English.ExpectedToken("{", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("{", GetLine(), GetIndex()));
             
             List<Binding> bindings = new List<Binding>();
 
@@ -253,18 +325,32 @@ namespace ABJAD.ParseEngine
                 bindings.Add(Binding());
             }
 
-            Consume(CLOSE_BRACE, ErrorMessages.English.ExpectedToken("}"), ErrorMessages.Arabic.ExpectedToken("}"));
+            Consume(CLOSE_BRACE, 
+                ErrorMessages.English.ExpectedToken("}", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("}", GetLine(), GetIndex()));
 
             return new Statement.BlockStmt(bindings);
         }
 
         private Statement PrintStmt()
         {
-            Consume(PRINT, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
-            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
+            Consume(PRINT, 
+                ErrorMessages.English.InvalidSyntax(GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.InvalidSyntax(GetLine(), GetIndex()));
+            
+            Consume(OPEN_PAREN, 
+                ErrorMessages.English.ExpectedToken("(", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("(", GetLine(), GetIndex()));
+
             var expr = Expression();
-            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
-            Consume(SEMICOLON, ErrorMessages.English.ExpectedToken(";"), ErrorMessages.Arabic.ExpectedToken("؛"));
+
+            Consume(CLOSE_PAREN, 
+                ErrorMessages.English.ExpectedToken(")", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken(")", GetLine(), GetIndex()));
+
+            Consume(SEMICOLON, 
+                ErrorMessages.English.ExpectedToken(";", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("؛", GetLine(), GetIndex()));
 
             return new Statement.PrintStmt(expr);
         }
@@ -387,7 +473,9 @@ namespace ABJAD.ParseEngine
                     break;
             }
 
-            throw new AbjadParsingException(ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
+            throw new AbjadParsingException(
+                ErrorMessages.English.InvalidSyntax(GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.InvalidSyntax(GetLine(), GetIndex()));
         }
 
         private Expression CallExpr()
@@ -396,12 +484,17 @@ namespace ABJAD.ParseEngine
 
             if (Peek(1)?.Type == DOT)
             {
-                className = Consume(ID, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
+                className = Consume(ID, 
+                    ErrorMessages.English.InvalidSyntax(GetLine(), GetIndex()), 
+                    ErrorMessages.Arabic.InvalidSyntax(GetLine(), GetIndex()));
+
                 Consume(DOT, "", "");
 
                 if (!Match(1, OPEN_PAREN))
                 {
-                    var field = Consume(ID, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
+                    var field = Consume(ID, 
+                        ErrorMessages.English.InvalidSyntax(GetLine(), GetIndex()),
+                        ErrorMessages.Arabic.InvalidSyntax(GetLine(), GetIndex()));
 
                     return new Expression.FieldExpr(className, field);
                 }
@@ -411,74 +504,128 @@ namespace ABJAD.ParseEngine
                 className = null;
             }
 
-            var funcName = Consume(ID, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
-            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
+            var funcName = Consume(ID, 
+                ErrorMessages.English.InvalidSyntax(GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.InvalidSyntax(GetLine(), GetIndex()));
+
+            Consume(OPEN_PAREN, 
+                ErrorMessages.English.ExpectedToken("(", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("(", GetLine(), GetIndex()));
 
             var parameters = Parameters();
 
-            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
+            Consume(CLOSE_PAREN, 
+                ErrorMessages.English.ExpectedToken(")", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken(")", GetLine(), GetIndex()));
 
             return new Expression.CallExpr(className, funcName, parameters);
         }
 
         private Expression InstExpr()
         {
-            Consume(NEW, ErrorMessages.English.ExpectedToken("'new' keyword"), ErrorMessages.Arabic.ExpectedToken("'الكلمة المفتاح 'انشئ"));
-            var className = Consume(ID, ErrorMessages.English.ExpectedToken("class name"), ErrorMessages.Arabic.ExpectedToken("إسم الصنف"));
-            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
+            Consume(NEW, 
+                ErrorMessages.English.ExpectedToken("'new' keyword", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("'الكلمة المفتاح 'انشئ", GetLine(), GetIndex()));
+
+            var className = Consume(ID, 
+                ErrorMessages.English.ExpectedToken("class name", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("إسم الصنف", GetLine(), GetIndex()));
+
+            Consume(OPEN_PAREN, 
+                ErrorMessages.English.ExpectedToken("(", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("(", GetLine(), GetIndex()));
 
             var parameters = Parameters();
 
-            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
+            Consume(CLOSE_PAREN, 
+                ErrorMessages.English.ExpectedToken(")", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken(")", GetLine(), GetIndex()));
 
             return new Expression.InstExpr(className, parameters);
         }
 
         private Expression GroupExpr()
         {
-            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
+            Consume(OPEN_PAREN, 
+                ErrorMessages.English.ExpectedToken("(", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("(", GetLine(), GetIndex()));
+
             var expr = Expression();
-            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
+            Consume(CLOSE_PAREN, 
+                ErrorMessages.English.ExpectedToken(")", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken(")", GetLine(), GetIndex()));
 
             return new Expression.GroupExpr(expr);
         }
 
         private Expression ToStrExpr()
         {
-            Consume(STRING, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
-            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
+            Consume(STRING, 
+                ErrorMessages.English.InvalidSyntax(GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.InvalidSyntax(GetLine(), GetIndex()));
+
+            Consume(OPEN_PAREN, 
+                ErrorMessages.English.ExpectedToken("(", GetLine(), GetIndex()),
+                ErrorMessages.Arabic.ExpectedToken("(", GetLine(), GetIndex()));
+
             var expr = Expression();
-            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
+            Consume(CLOSE_PAREN, 
+                ErrorMessages.English.ExpectedToken(")", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken(")", GetLine(), GetIndex()));
 
             return new Expression.ToStrExpr(expr);
         }
 
         private Expression ToNumberExpr()
         {
-            Consume(NUMBER, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
-            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
+            Consume(NUMBER, 
+                ErrorMessages.English.InvalidSyntax(GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.InvalidSyntax(GetLine(), GetIndex()));
+
+            Consume(OPEN_PAREN, 
+                ErrorMessages.English.ExpectedToken("(", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("(", GetLine(), GetIndex()));
+
             var expr = Expression();
-            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
+            Consume(CLOSE_PAREN, 
+                ErrorMessages.English.ExpectedToken(")", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken(")", GetLine(), GetIndex()));
 
             return new Expression.ToNumberExpr(expr);
         }
 
         private Expression ToBoolExpr()
         {
-            Consume(BOOL, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
-            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
+            Consume(BOOL, 
+                ErrorMessages.English.InvalidSyntax(GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.InvalidSyntax(GetLine(), GetIndex()));
+
+            Consume(OPEN_PAREN, 
+                ErrorMessages.English.ExpectedToken("(", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("(", GetLine(), GetIndex()));
+
             var expr = Expression();
-            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
+            Consume(CLOSE_PAREN, 
+                ErrorMessages.English.ExpectedToken(")", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken(")", GetLine(), GetIndex()));
 
             return new Expression.ToBoolExpr(expr);
         }
 
         private Expression TypeofExpr()
         {
-            Consume(TYPEOF, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
-            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
+            Consume(TYPEOF, 
+                ErrorMessages.English.InvalidSyntax(GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.InvalidSyntax(GetLine(), GetIndex()));
+
+            Consume(OPEN_PAREN, 
+                ErrorMessages.English.ExpectedToken("(", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken("(", GetLine(), GetIndex()));
+
             var expr = Expression();
-            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
+            Consume(CLOSE_PAREN, 
+                ErrorMessages.English.ExpectedToken(")", GetLine(), GetIndex()), 
+                ErrorMessages.Arabic.ExpectedToken(")", GetLine(), GetIndex()));
 
             return new Expression.TypeofExpr(expr);
         }
@@ -570,6 +717,16 @@ namespace ABJAD.ParseEngine
                 return null;
 
             return tokens[_current + offset];
+        }
+
+        private int GetLine()
+        {
+            return Peek().Line;
+        }
+
+        private int GetIndex()
+        {
+            return Peek().Index;
         }
     }
 }

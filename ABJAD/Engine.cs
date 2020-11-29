@@ -21,7 +21,6 @@ namespace ABJAD
                 {
                     Execute(args[0], o.OutputPath);
                 });
-            //Execute("C:\\Users\\mezdn\\Desktop\\ABJAD\\casting.abjad", null);
         }
 
         static void Execute(string programPath, string outputPath)

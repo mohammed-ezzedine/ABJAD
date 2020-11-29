@@ -15,7 +15,7 @@ namespace ABJAD.InterpretEngine
 
         public new Token Type { get; set; }
 
-        public override AbjadString GetType()
+        public override AbjadString GetType(int line, int index)
         {
             return new AbjadString(Type.Text);
         }

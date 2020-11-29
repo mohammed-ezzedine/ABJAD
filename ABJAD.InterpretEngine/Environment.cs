@@ -1,4 +1,5 @@
-﻿using ABJAD.Models.Exceptions;
+﻿using ABJAD.Models;
+using ABJAD.Models.Exceptions;
 using System;
 using System.Collections.Generic;
 using static ABJAD.Models.Constants;
@@ -59,7 +60,7 @@ namespace ABJAD.InterpretEngine
             return new Environment(this, env, consts);
         }
 
-        public dynamic Get(string key)
+        public dynamic Get(string key, int line, int index)
         {
             if (local_constants.ContainsKey(key))
                 return local_constants[key];
@@ -71,17 +72,22 @@ namespace ABJAD.InterpretEngine
                 return environment[key];
             else
                 throw new AbjadInterpretingException(
-                    ErrorMessages.English.UnknownKey(key),
-                    ErrorMessages.Arabic.UnknownKey(key)
+                    ErrorMessages.English.UnknownKey(key, line, index),
+                    ErrorMessages.Arabic.UnknownKey(key, line, index)
                 );
         }
 
-        public void Set(string key, dynamic value)
+        public dynamic Get(Token token)
+        {
+            return Get(token.Text, token.Line, token.Index);
+        }
+
+        public void Set(string key, dynamic value, int line = 0, int index = 0)
         {
             if (constants.ContainsKey(key) || local_constants.ContainsKey(key))
                 throw new AbjadInterpretingException(
-                    ErrorMessages.English.ConstantModification,
-                    ErrorMessages.Arabic.ConstantModification
+                    ErrorMessages.English.ConstantModification(line, index),
+                    ErrorMessages.Arabic.ConstantModification(line, index)
                 );
 
             local_environment[key] = value;
@@ -92,16 +98,18 @@ namespace ABJAD.InterpretEngine
 
                 if (parent_scope != null)
                 {
-                    parent_scope.Set(key, value);
+                    parent_scope.Set(key, value); 
                 }
             }
         }
 
-        public void SetConstant(string key, dynamic value)
+        public void SetConstant(string key, dynamic value, int line, int index)
         {
             if (environment.ContainsKey(key) || local_environment.ContainsKey(key) ||
                 constants.ContainsKey(key) || local_constants.ContainsKey(key))
-                throw new AbjadInterpretingException(ErrorMessages.English.NameTaken(key), ErrorMessages.Arabic.NameTaken(key));
+                throw new AbjadInterpretingException(
+                    ErrorMessages.English.NameTaken(key, line, index), 
+                    ErrorMessages.Arabic.NameTaken(key, line, index));
 
             local_constants[key] = value;
         }

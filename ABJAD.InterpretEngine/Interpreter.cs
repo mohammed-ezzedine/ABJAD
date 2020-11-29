@@ -1,4 +1,5 @@
 ﻿using ABJAD.IO;
+using ABJAD.Models;
 using ABJAD.Models.Exceptions;
 using ABJAD.Models.Exceptions.InterpretingExceptions;
 using ABJAD.ParseEngine;
@@ -66,11 +67,11 @@ namespace ABJAD.InterpretEngine
         {
             if (environment.ContainsKey(declaration.Name.Text))
             {
-                throw new AbjadNameTakenException(declaration.Name.Text);
+                throw new AbjadNameTakenException(declaration.Name.Text, declaration.Name.Line, declaration.Name.Index);
             }
 
             var abjadFunction = new AbjadFunction(declaration, environment.Clone() as Environment);
-            environment.Set(declaration.Name.Text, abjadFunction);
+            environment.Set(declaration.Name.Text, abjadFunction, declaration.Name.Line, declaration.Name.Index);
             return null;
         }
 
@@ -78,10 +79,10 @@ namespace ABJAD.InterpretEngine
         {
             if (environment.ContainsKey(declaration.Name.Text))
             {
-                throw new AbjadNameTakenException(declaration.Name.Text);
+                throw new AbjadNameTakenException(declaration.Name.Text, declaration.Name.Line, declaration.Name.Index);
             }
 
-            environment.SetConstant(declaration.Name.Text, Evaluate(declaration.Value));
+            environment.SetConstant(declaration.Name.Text, Evaluate(declaration.Value), declaration.Name.Line, declaration.Name.Index);
             return null;
         }
 
@@ -89,10 +90,10 @@ namespace ABJAD.InterpretEngine
         {
             if (environment.ContainsKey(declaration.Name.Text))
             {
-                throw new AbjadNameTakenException(declaration.Name.Text);
+                throw new AbjadNameTakenException(declaration.Name.Text, declaration.Name.Line, declaration.Name.Index);
             }
 
-            environment.Set(declaration.Name.Text, Evaluate(declaration.Value)); 
+            environment.Set(declaration.Name.Text, Evaluate(declaration.Value), declaration.Name.Line, declaration.Name.Index); 
             return null;
         }
 
@@ -100,11 +101,11 @@ namespace ABJAD.InterpretEngine
         {
             if (environment.ContainsKey(declaration.Name.Text))
             {
-                throw new AbjadNameTakenException(declaration.Name.Text);
+                throw new AbjadNameTakenException(declaration.Name.Text, declaration.Name.Line, declaration.Name.Index);
             }
 
             var abjadClass = new AbjadClass(declaration, environment);
-            environment.Set(declaration.Name.Text, abjadClass);
+            environment.Set(declaration.Name.Text, abjadClass, declaration.Name.Line, declaration.Name.Index);
 
             return null;
         }
@@ -115,17 +116,17 @@ namespace ABJAD.InterpretEngine
 
             if (expr.Class == null)
             {
-                abjadFunc = environment.Get(expr.Func.Text) as AbjadFunction;
+                abjadFunc = environment.Get(expr.Func) as AbjadFunction;
             }
             else
             {
-                var abjadInstance = environment.Get(expr.Class.Text) as AbjadInstance;
+                var abjadInstance = environment.Get(expr.Class) as AbjadInstance;
                 if (abjadInstance == null)
                 {
-                    throw new AbjadUnknownClassException(expr.Class.Text);
+                    throw new AbjadUnknownClassException(expr.Class.Text, expr.Class.Line, expr.Class.Index);
                 }
 
-                var abjadClass = environment.Get(abjadInstance.Type.Text) as AbjadClass;
+                var abjadClass = environment.Get(abjadInstance.Type) as AbjadClass;
                 var abjadClassBlock = abjadClass.Declaration.Block as Statement.BlockStmt;
 
                 foreach (var binding in abjadClassBlock.BindingList)
@@ -141,7 +142,7 @@ namespace ABJAD.InterpretEngine
             if (abjadFunc == null ||
                 abjadFunc.Declaration.Parameters.Count != expr.Parameters.Count)
             {
-                throw new AbjadUnknownFunctionException(expr.Func.Text, expr.Parameters.Count);
+                throw new AbjadUnknownFunctionException(expr.Func.Text, expr.Parameters.Count, expr.Func.Line, expr.Func.Index);
             }
 
             var parameters = expr.Parameters.Select(p => Evaluate(p)).ToList();
@@ -151,27 +152,29 @@ namespace ABJAD.InterpretEngine
 
         public object VisitFieldExpr(Expression.FieldExpr expr)
         {
-            var @class = environment.Get(expr.Class.Text) as AbjadInstance;
+            var @class = environment.Get(expr.Class) as AbjadInstance;
             if (@class == null)
             {
-                throw new AbjadUnknownClassException(expr.Class.Text);
+                throw new AbjadUnknownClassException(expr.Class.Text, -1, -1);
             }
 
-            return @class.Environment.Get(expr.Field.Text);
+            return @class.Environment.Get(expr.Field);
         }
 
         public object VisitInstExpr(Expression.InstExpr expr)
         {
-            var @class = environment.Get(expr.Class.Text) as AbjadClass;
+            var @class = environment.Get(expr.Class) as AbjadClass;
             if (@class == null)
             {
-                throw new AbjadUnknownClassException(expr.Class.Text);
+                throw new AbjadUnknownClassException(expr.Class.Text, -1, -1);
             }
 
             var classBlock = @class.Declaration.Block as Statement.BlockStmt;
             if (classBlock == null)
             {
-                throw new AbjadInterpretingException(ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
+                throw new AbjadInterpretingException(
+                    ErrorMessages.English.InvalidSyntax(-1, -1), 
+                    ErrorMessages.Arabic.InvalidSyntax(-1, -1));
             }
 
             var parameters = expr.Parameters.Select(p => Evaluate(p)).ToList();
@@ -185,11 +188,13 @@ namespace ABJAD.InterpretEngine
             switch (expr.Operation.Type)
             {
                 case MINUS:
-                    return operand.OperatorUMinus();
+                    return operand.OperatorUMinus(expr.Operation.Line, expr.Operation.Index);
                 case BANG:
-                    return operand.OperatorBang();
+                    return operand.OperatorBang(expr.Operation.Line, expr.Operation.Index);
                 default:
-                    throw new AbjadInterpretingException(ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
+                    throw new AbjadInterpretingException(
+                        ErrorMessages.English.InvalidSyntax(expr.Operation.Line, expr.Operation.Index), 
+                        ErrorMessages.Arabic.InvalidSyntax(expr.Operation.Line, expr.Operation.Index));
             }
         }
 
@@ -201,31 +206,33 @@ namespace ABJAD.InterpretEngine
             switch (expr.Operation.Type)
             {
                 case AND:
-                    return oper1.OperatorAnd(oper2);
+                    return oper1.OperatorAnd(oper2, expr.Operation.Line, expr.Operation.Index);
                 case OR:
-                    return oper1.OperatorOr(oper2);
+                    return oper1.OperatorOr(oper2, expr.Operation.Line, expr.Operation.Index);
                 case BANG_EQUAL:
-                    return new AbjadBool(!(bool)oper1.OperatorEqual(oper2).Value);
+                    return new AbjadBool(!(bool)oper1.OperatorEqual(oper2, expr.Operation.Line, expr.Operation.Index).Value);
                 case EQUAL_EQUAL:
-                    return oper1.OperatorEqual(oper2);
+                    return oper1.OperatorEqual(oper2, expr.Operation.Line, expr.Operation.Index);
                 case DIVIDED_BY:
-                    return oper1.OperatorDiviededBy(oper2);
+                    return oper1.OperatorDiviededBy(oper2, expr.Operation.Line, expr.Operation.Index);
                 case GREATER_EQUAL:
-                    return oper1.OperatorGreaterEqual(oper2);
+                    return oper1.OperatorGreaterEqual(oper2, expr.Operation.Line, expr.Operation.Index);
                 case GREATER_THAN:
-                    return oper1.OperatorGreaterThan(oper2);
+                    return oper1.OperatorGreaterThan(oper2, expr.Operation.Line, expr.Operation.Index);
                 case LESS_EQUAL:
-                    return oper1.OperatorLessEqual(oper2);
+                    return oper1.OperatorLessEqual(oper2, expr.Operation.Line, expr.Operation.Index);
                 case LESS_THAN:
-                    return oper1.OperatorLessThan(oper2);
+                    return oper1.OperatorLessThan(oper2, expr.Operation.Line, expr.Operation.Index);
                 case MINUS:
-                    return oper1.OperatorMinus(oper2);
+                    return oper1.OperatorMinus(oper2, expr.Operation.Line, expr.Operation.Index);
                 case PLUS:
-                    return oper1.OperatorPlus(oper2);
+                    return oper1.OperatorPlus(oper2, expr.Operation.Line, expr.Operation.Index);
                 case TIMES:
-                    return oper1.OperatorTimes(oper2);
+                    return oper1.OperatorTimes(oper2, expr.Operation.Line, expr.Operation.Index);
                 default:
-                    throw new AbjadInterpretingException(ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
+                    throw new AbjadInterpretingException(
+                        ErrorMessages.English.InvalidSyntax(expr.Operation.Line, expr.Operation.Index), 
+                        ErrorMessages.Arabic.InvalidSyntax(expr.Operation.Line, expr.Operation.Index));
             }
         }
 
@@ -244,10 +251,10 @@ namespace ABJAD.InterpretEngine
             var inputObj = Evaluate(expr.Input) as AbjadObject;
             if (inputObj == null)
             {
-                throw new AbjadCastingException("string");
+                throw new AbjadCastingException(Types.String, -1, -1);
             }
 
-            return inputObj.ToStr();
+            return inputObj.ToStr(-1, -1);
         }
 
         public object VisitToNumberExpr(Expression.ToNumberExpr expr)
@@ -255,10 +262,10 @@ namespace ABJAD.InterpretEngine
             var inputObj = Evaluate(expr.Input) as AbjadObject;
             if (inputObj == null)
             {
-                throw new AbjadCastingException("string");
+                throw new AbjadCastingException(Types.Number, -1, -1);
             }
 
-            return inputObj.ToNumber();
+            return inputObj.ToNumber(-1, -1);
         }
 
         public object VisitToBoolExpr(Expression.ToBoolExpr expr)
@@ -266,10 +273,10 @@ namespace ABJAD.InterpretEngine
             var inputObj = Evaluate(expr.Input) as AbjadObject;
             if (inputObj == null)
             {
-                throw new AbjadCastingException("string");
+                throw new AbjadCastingException(Types.Bool, -1, -1);
             }
 
-            return inputObj.ToBool();
+            return inputObj.ToBool(-1, -1);
         }
 
         public object VisitTypeofExpr(Expression.TypeofExpr expr)
@@ -277,10 +284,10 @@ namespace ABJAD.InterpretEngine
             var inputObj = Evaluate(expr.Input) as AbjadObject;
             if (inputObj == null)
             {
-                throw new AbjadCastingException("string");
+                throw new AbjadCastingException(Types.String, -1, -1);
             }
 
-            return inputObj.GetType();
+            return inputObj.GetType(-1, -1);
         }
 
         public object VisitNumberConst(Primitive.NumberConst numberConst) => new AbjadNumber(numberConst.value);
@@ -293,7 +300,7 @@ namespace ABJAD.InterpretEngine
 
         public object VisitNull(Primitive.Null @null) => null;
 
-        public object VisitIdentifier(Primitive.Identifier identifier) =>  environment.Get(identifier.value);
+        public object VisitIdentifier(Primitive.Identifier identifier) =>  environment.Get(identifier.value, -1, -1);
 
         public object VisitExprStmt(Statement.ExprStmt stmt)
         {
@@ -355,16 +362,16 @@ namespace ABJAD.InterpretEngine
 
         public object VisitAssignmentStmt(Statement.AssignmentStmt stmt)
         {
-            var variable = environment.Get(stmt.Variable.Text);
+            var variable = environment.Get(stmt.Variable);
 
-            environment.Set(stmt.Variable.Text, Evaluate(stmt.Value));
+            environment.Set(stmt.Variable.Text, Evaluate(stmt.Value), stmt.Variable.Line, stmt.Variable.Index);
             return null;
         }
 
         public object VisitPrintStmt(Statement.PrintStmt stmt)
         {
             var val = Evaluate(stmt.Expr) as AbjadObject;
-            var edited = val == null? "عدم" : val.ToStr().Value as string;
+            var edited = val == null? "عدم" : val.ToStr(-1, -1).Value as string;
             Writer.Write(edited);
             return null;
         }
@@ -404,7 +411,7 @@ namespace ABJAD.InterpretEngine
                 var paramName = defPrimitive?.value;
 
                 var paramValue = parameters[i];
-                scope.Set(paramName, paramValue);
+                scope.Set(paramName, paramValue, -1, -1);
             }
         }
 
