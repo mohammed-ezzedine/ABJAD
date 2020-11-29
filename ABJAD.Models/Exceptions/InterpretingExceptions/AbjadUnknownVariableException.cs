@@ -1,9 +1,14 @@
-﻿namespace ABJAD.Models.Exceptions
+﻿using static ABJAD.Models.Constants;
+
+namespace ABJAD.Models.Exceptions
 {
     public class AbjadUnknownVariableException : AbjadInterpretingException
     {
         public AbjadUnknownVariableException(string varName)
-            : base($"Variable of name {varName} is undefined.")
+            : base(
+                  ErrorMessages.English.UnknownVariable(varName),
+                  ErrorMessages.Arabic.UnknownVariable(varName)
+            )
         {
         }
     }

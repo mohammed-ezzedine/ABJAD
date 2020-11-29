@@ -1,9 +1,14 @@
-﻿namespace ABJAD.Models.Exceptions
+﻿using static ABJAD.Models.Constants;
+
+namespace ABJAD.Models.Exceptions
 {
     public class AbjadUnknownClassException : AbjadInterpretingException
     {
         public AbjadUnknownClassException(string className) 
-            : base($"Class with name {className} doesn't exits in the environment scope.")
+            : base(
+                  ErrorMessages.English.UnknownClass(className),
+                  ErrorMessages.Arabic.UnknownClass(className)
+            )
         {
         }
     }

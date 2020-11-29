@@ -1,9 +1,14 @@
-﻿namespace ABJAD.Models.Exceptions
+﻿using static ABJAD.Models.Constants;
+
+namespace ABJAD.Models.Exceptions
 {
     public class AbjadUnknownFunctionException : AbjadInterpretingException
     {
         public AbjadUnknownFunctionException(string funcName, int paramsCount) 
-            : base($"There is no function called {funcName} that takes {paramsCount} parameters in the environment scope.")
+            : base(
+                  ErrorMessages.English.UnknownFunction(funcName, paramsCount),
+                  ErrorMessages.Arabic.UnknownFunction(funcName, paramsCount)
+            )
         {
         }
     }

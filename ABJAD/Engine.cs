@@ -1,6 +1,7 @@
 ﻿using ABJAD.InterpretEngine;
 using ABJAD.IO;
 using ABJAD.LexEngine;
+using ABJAD.Models.Exceptions;
 using CommandLine;
 
 namespace ABJAD
@@ -9,9 +10,6 @@ namespace ABJAD
     {
         public class Options
         {
-            [Option('i', Required = true, HelpText = "Provide the path of the ABJAD program file.")]
-            public string ProgramPath { get; set; }
-
             [Option('o', Required = false, HelpText = "Set the ouput text file path (Defualts to the name of the ABJAD program with .txt extension.")]
             public string OutputPath { get; set; }
         }
@@ -21,8 +19,9 @@ namespace ABJAD
             CommandLine.Parser.Default.ParseArguments<Options>(args)
                 .WithParsed(o =>
                 {
-                    Execute(o.ProgramPath, o.OutputPath);
+                    Execute(args[0], o.OutputPath);
                 });
+            //Execute("C:\\Users\\mezdn\\Desktop\\ABJAD\\casting.abjad", null);
         }
 
         static void Execute(string programPath, string outputPath)
@@ -31,18 +30,25 @@ namespace ABJAD
             {
                 outputPath = programPath.Split(".abjad")[0] + ".txt";
             }
-
-            var code = Reader.Read(programPath);
-
-            var lexer = new Lexer(code);
-            var tokens = lexer.Lex();
-
-            var parser = new ParseEngine.Parser(tokens);
-            var bindings = parser.Parse();
-
             var writer = new Writer(outputPath);
-            var interpreter = new Interpreter(writer);
-            interpreter.Interpret(bindings);
+
+            try
+            {
+                var code = Reader.Read(programPath);
+
+                var lexer = new Lexer(code);
+                var tokens = lexer.Lex();
+
+                var parser = new ParseEngine.Parser(tokens);
+                var bindings = parser.Parse();
+
+                var interpreter = new Interpreter(writer);
+                interpreter.Interpret(bindings);
+            }
+            catch (AbjadException e)
+            {
+                writer.Write(e.ArabicMessage);
+            }
         }
     }
 }

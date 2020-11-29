@@ -194,13 +194,13 @@ namespace ABJAD.LexEngine
                     if (Match('&'))
                         AddToken(AND);
                     else
-                        throw new AbjadUnexpectedTokenException(_line, _lineIndex);
+                        throw new AbjadUnexpectedTokenException(_line, _lineIndex, Peek().ToString());
                     return;
                 case '|':
                     if (Match('|'))
                         AddToken(OR);
                     else
-                        throw new AbjadUnexpectedTokenException(_line, _lineIndex);
+                        throw new AbjadUnexpectedTokenException(_line, _lineIndex, Peek().ToString());
                     return;
                 default:
                     if (ScanKeyword()) return;
@@ -380,11 +380,6 @@ namespace ABJAD.LexEngine
         private Token Previous(int i = 0)
         {
             var length = Tokens.Count;
-            if (length < i)
-            {
-                throw new AbjadLexingException("Range out of bound.");
-            }
-
             return Tokens[length - i - 1];
         }
     }

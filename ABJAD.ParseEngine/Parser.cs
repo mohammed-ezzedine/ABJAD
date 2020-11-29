@@ -3,6 +3,7 @@ using ABJAD.Models.Exceptions;
 using static ABJAD.Models.TokenType;
 using System.Collections.Generic;
 using System;
+using static ABJAD.Models.Constants;
 
 namespace ABJAD.ParseEngine
 {
@@ -103,7 +104,7 @@ namespace ABJAD.ParseEngine
 
         private Declaration Class()
         {
-            var name = Consume(ID, "The class name should go directly after the class keyword.");
+            var name = Consume(ID, ErrorMessages.English.ExpectedToken("class name"), ErrorMessages.Arabic.ExpectedToken("إسم الصنف"));
 
             var block = Block();
             
@@ -112,13 +113,13 @@ namespace ABJAD.ParseEngine
 
         private Declaration Function()
         {
-            var name = Consume(ID, "The function name should go directly after the function keyword.");
+            var name = Consume(ID, ErrorMessages.English.ExpectedToken("function name"), ErrorMessages.Arabic.ExpectedToken("إسم الدالة"));
 
-            Consume(OPEN_PAREN, "A function should be followed by parenthesis");
+            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
 
             var parameters = Parameters();
 
-            Consume(CLOSE_PAREN, "A function parameters should be followed by a closing ')'");
+            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
 
             var block = Block();
 
@@ -128,34 +129,34 @@ namespace ABJAD.ParseEngine
 
         private Declaration Constant()
         {
-            var name = Consume(ID, "The constant should have a name.");
+            var name = Consume(ID, ErrorMessages.English.ExpectedToken("constant name"), ErrorMessages.Arabic.ExpectedToken("إسم الثابت"));
 
             Expression value = null;
             if (Peek()?.Type != SEMICOLON)
             {
-                Consume(EQUAL, "A constant shall not be declared without a value");
+                Consume(EQUAL, ErrorMessages.English.UnassignedConst, ErrorMessages.Arabic.UnassignedConst);
 
                 value = Expression();
             }
 
-            Consume(SEMICOLON, $"The declaration of the constant {name.Text} is missing a semicolon.");
+            Consume(SEMICOLON, ErrorMessages.English.ExpectedToken(";"), ErrorMessages.Arabic.ExpectedToken("؛"));
 
             return new Declaration.ConstDecl(name, value);
         }
 
         private Declaration Variable()
         {
-            var name = Consume(ID, "The variable should have a name.");
+            var name = Consume(ID, ErrorMessages.English.ExpectedToken("variable name"), ErrorMessages.Arabic.ExpectedToken("إسم المتغير"));
 
             Expression value = null;
             if (Peek()?.Type != SEMICOLON)
             {
-                Consume(EQUAL, "A variable shall not be declared without a value");
+                Consume(EQUAL, ErrorMessages.English.UnassignedVar, ErrorMessages.Arabic.UnassignedVar);
 
                 value = Expression();
             }
 
-            Consume(SEMICOLON, $"The declaration of the variable {name.Text} is missing a semicolon.");
+            Consume(SEMICOLON, ErrorMessages.English.ExpectedToken(";"), ErrorMessages.Arabic.ExpectedToken("؛"));
 
             return new Declaration.VarDecl(name, value);
         }
@@ -163,26 +164,26 @@ namespace ABJAD.ParseEngine
         private Statement ExprStmt()
         {
             var expr = Expression();
-            Consume(SEMICOLON, "A statement should end with a semicolon.");
+            Consume(SEMICOLON, ErrorMessages.English.ExpectedToken(";"), ErrorMessages.Arabic.ExpectedToken("؛"));
 
             return new Statement.ExprStmt(expr);
         }
 
         private Statement IfStmt()
         {
-            Consume(IF, "Wrong if statement syntax.");
-            Consume(OPEN_PAREN, "The condition of the if statement should be enclosed with paranthesis.");
+            Consume(IF, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
+            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
 
             var condition = Expression();
 
-            Consume(CLOSE_PAREN, "A closing ')' is missing.");
+            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
 
             Statement.BlockStmt ifBody = Block();
             Statement.BlockStmt elseBody = null;
 
             if (Peek()?.Type == ELSE)
             {
-                Consume(ELSE, "");
+                Consume(ELSE, "", "");
                 elseBody = Block();
             }
 
@@ -191,10 +192,10 @@ namespace ABJAD.ParseEngine
 
         private Statement WhileStmt()
         {
-            Consume(WHILE, "Wrong while statement syntax.");
-            Consume(OPEN_PAREN, "The condition of the while statement should be enclosed with paranthesis.");
+            Consume(WHILE, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
+            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
             var condition = Expression();
-            Consume(CLOSE_PAREN, "A closing ')' is missing.");
+            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
             var body = Block();
 
             return new Statement.WhileStmt(condition, body);
@@ -202,14 +203,14 @@ namespace ABJAD.ParseEngine
 
         private Statement ForStmt()
         {
-            Consume(FOR, "Wrong for statament syntax.");
-            Consume(OPEN_PAREN, "For keyword should be followed by an opening '('");
-            Consume(VAR, "Variables only can be used in for loops.");
+            Consume(FOR, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
+            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
+            Consume(VAR, ErrorMessages.English.ForLoopVar, ErrorMessages.Arabic.ForLoopVar);
             var declaration = Variable();
             var condition = Expression();
-            Consume(SEMICOLON, "Statement should be seperated by a semicolon.");
+            Consume(SEMICOLON, ErrorMessages.English.ExpectedToken(";"), ErrorMessages.Arabic.ExpectedToken("؛"));
             var assignment = Assignment();
-            Consume(CLOSE_PAREN, "A closing ')' is missing.");
+            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
             var block = Block();
 
             return new Statement.ForStmt(block, assignment, condition, declaration);
@@ -217,9 +218,9 @@ namespace ABJAD.ParseEngine
 
         private Statement ReturnStmt()
         {
-            Consume(RETURN, "Wrong return stament syntax.");
+            Consume(RETURN, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
             var expr = Expression();
-            Consume(SEMICOLON, "A statement should end with a semicolon.");
+            Consume(SEMICOLON, ErrorMessages.English.ExpectedToken(";"), ErrorMessages.Arabic.ExpectedToken("؛"));
 
             return new Statement.ReturnStmt(expr);
         }
@@ -227,15 +228,15 @@ namespace ABJAD.ParseEngine
         private Statement AsstStmt()
         {
             var asst = Assignment();
-            Consume(SEMICOLON, "A statement should end with a semicolon.");
+            Consume(SEMICOLON, ErrorMessages.English.ExpectedToken(";"), ErrorMessages.Arabic.ExpectedToken("؛"));
 
             return asst;
         }
 
         private Statement.AssignmentStmt Assignment()
         {
-            var name = Consume(ID, "Variable name was expected.");
-            Consume(EQUAL, "Wrong assignment statement syntax.");
+            var name = Consume(ID, ErrorMessages.English.ExpectedToken("variable name"), ErrorMessages.Arabic.ExpectedToken("إسم المتغير"));
+            Consume(EQUAL, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
             var value = Expression();
 
             return new Statement.AssignmentStmt(name, value);
@@ -243,7 +244,7 @@ namespace ABJAD.ParseEngine
 
         private Statement.BlockStmt Block()
         {
-            Consume(OPEN_BRACE, "A block should be enclosed with braces.");
+            Consume(OPEN_BRACE, ErrorMessages.English.ExpectedToken("{"), ErrorMessages.Arabic.ExpectedToken("{"));
             
             List<Binding> bindings = new List<Binding>();
 
@@ -252,18 +253,18 @@ namespace ABJAD.ParseEngine
                 bindings.Add(Binding());
             }
 
-            Consume(CLOSE_BRACE, "A closing '}' is missing.");
+            Consume(CLOSE_BRACE, ErrorMessages.English.ExpectedToken("}"), ErrorMessages.Arabic.ExpectedToken("}"));
 
             return new Statement.BlockStmt(bindings);
         }
 
         private Statement PrintStmt()
         {
-            Consume(PRINT, "Wrong print stament syntax.");
-            Consume(OPEN_PAREN, "The expression should be enclosed with paranthesis.");
+            Consume(PRINT, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
+            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
             var expr = Expression();
-            Consume(CLOSE_PAREN, "A closing ')' is missing.");
-            Consume(SEMICOLON, "A statement should end with a semicolon.");
+            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
+            Consume(SEMICOLON, ErrorMessages.English.ExpectedToken(";"), ErrorMessages.Arabic.ExpectedToken("؛"));
 
             return new Statement.PrintStmt(expr);
         }
@@ -386,7 +387,7 @@ namespace ABJAD.ParseEngine
                     break;
             }
 
-            throw new AbjadParsingException("Invalid primitive syntax.");
+            throw new AbjadParsingException(ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
         }
 
         private Expression CallExpr()
@@ -395,12 +396,12 @@ namespace ABJAD.ParseEngine
 
             if (Peek(1)?.Type == DOT)
             {
-                className = Consume(ID, "Invalid class name syntax.");
-                Consume(DOT, "");
+                className = Consume(ID, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
+                Consume(DOT, "", "");
 
                 if (!Match(1, OPEN_PAREN))
                 {
-                    var field = Consume(ID, "Invalid field syntax.");
+                    var field = Consume(ID, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
 
                     return new Expression.FieldExpr(className, field);
                 }
@@ -410,74 +411,74 @@ namespace ABJAD.ParseEngine
                 className = null;
             }
 
-            var funcName = Consume(ID, "Invalid function name syntax.");
-            Consume(OPEN_PAREN, "A function name should be followed by parenthesis");
+            var funcName = Consume(ID, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
+            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
 
             var parameters = Parameters();
 
-            Consume(CLOSE_PAREN, "function parameters should be followed by a closing ')'");
+            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
 
             return new Expression.CallExpr(className, funcName, parameters);
         }
 
         private Expression InstExpr()
         {
-            Consume(NEW, "A new keyword is required for instantiating a class.");
-            var className = Consume(ID, "class name is required.");
-            Consume(OPEN_PAREN, "A class name should be followed by parenthesis");
+            Consume(NEW, ErrorMessages.English.ExpectedToken("'new' keyword"), ErrorMessages.Arabic.ExpectedToken("'الكلمة المفتاح 'انشئ"));
+            var className = Consume(ID, ErrorMessages.English.ExpectedToken("class name"), ErrorMessages.Arabic.ExpectedToken("إسم الصنف"));
+            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
 
             var parameters = Parameters();
 
-            Consume(CLOSE_PAREN, "Class parameters should be followed by a closing ')'");
+            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
 
             return new Expression.InstExpr(className, parameters);
         }
 
         private Expression GroupExpr()
         {
-            Consume(OPEN_PAREN, "'(' was expected.");
+            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
             var expr = Expression();
-            Consume(CLOSE_PAREN, "')' was expected.");
+            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
 
             return new Expression.GroupExpr(expr);
         }
 
         private Expression ToStrExpr()
         {
-            Consume(STRING, "Invalid cast syntax");
-            Consume(OPEN_PAREN, "'(' was expected.");
+            Consume(STRING, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
+            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
             var expr = Expression();
-            Consume(CLOSE_PAREN, "')' was expected.");
+            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
 
             return new Expression.ToStrExpr(expr);
         }
 
         private Expression ToNumberExpr()
         {
-            Consume(NUMBER, "Invalid cast syntax");
-            Consume(OPEN_PAREN, "'(' was expected.");
+            Consume(NUMBER, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
+            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
             var expr = Expression();
-            Consume(CLOSE_PAREN, "')' was expected.");
+            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
 
             return new Expression.ToNumberExpr(expr);
         }
 
         private Expression ToBoolExpr()
         {
-            Consume(BOOL, "Invalid cast syntax");
-            Consume(OPEN_PAREN, "'(' was expected.");
+            Consume(BOOL, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
+            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
             var expr = Expression();
-            Consume(CLOSE_PAREN, "')' was expected.");
+            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
 
             return new Expression.ToBoolExpr(expr);
         }
 
         private Expression TypeofExpr()
         {
-            Consume(TYPEOF, "Invalid type syntax");
-            Consume(OPEN_PAREN, "'(' was expected.");
+            Consume(TYPEOF, ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
+            Consume(OPEN_PAREN, ErrorMessages.English.ExpectedToken("("), ErrorMessages.Arabic.ExpectedToken("("));
             var expr = Expression();
-            Consume(CLOSE_PAREN, "')' was expected.");
+            Consume(CLOSE_PAREN, ErrorMessages.English.ExpectedToken(")"), ErrorMessages.Arabic.ExpectedToken(")"));
 
             return new Expression.TypeofExpr(expr);
         }
@@ -506,7 +507,7 @@ namespace ABJAD.ParseEngine
             return binding;
         }
 
-        private Token Consume(TokenType type, string errorMessage)
+        private Token Consume(TokenType type, string errorMessage_en, string errorMessage_ar)
         {
             if (HasNext(out Token token))
             {
@@ -517,7 +518,7 @@ namespace ABJAD.ParseEngine
             }
             _current--;
 
-            throw new AbjadParsingException(errorMessage);
+            throw new AbjadParsingException(errorMessage_en, errorMessage_ar);
         }
 
         private Token Consume()

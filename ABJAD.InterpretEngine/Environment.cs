@@ -1,6 +1,7 @@
 ﻿using ABJAD.Models.Exceptions;
 using System;
 using System.Collections.Generic;
+using static ABJAD.Models.Constants;
 
 namespace ABJAD.InterpretEngine
 {
@@ -69,13 +70,19 @@ namespace ABJAD.InterpretEngine
             else if (environment.ContainsKey(key))
                 return environment[key];
             else
-                throw new AbjadInterpretingException($"Key {key} was not found in the scope.");
+                throw new AbjadInterpretingException(
+                    ErrorMessages.English.UnknownKey(key),
+                    ErrorMessages.Arabic.UnknownKey(key)
+                );
         }
 
         public void Set(string key, dynamic value)
         {
             if (constants.ContainsKey(key) || local_constants.ContainsKey(key))
-                throw new AbjadInterpretingException("Cannot change the value of a constant.");
+                throw new AbjadInterpretingException(
+                    ErrorMessages.English.ConstantModification,
+                    ErrorMessages.Arabic.ConstantModification
+                );
 
             local_environment[key] = value;
 
@@ -92,11 +99,9 @@ namespace ABJAD.InterpretEngine
 
         public void SetConstant(string key, dynamic value)
         {
-            if (environment.ContainsKey(key) || local_environment.ContainsKey(key))
-                throw new AbjadInterpretingException($"Variable with name {key} already exists.");
-
-            if (constants.ContainsKey(key) || local_constants.ContainsKey(key))
-                throw new AbjadInterpretingException($"Constant with name {key} already exists.");
+            if (environment.ContainsKey(key) || local_environment.ContainsKey(key) ||
+                constants.ContainsKey(key) || local_constants.ContainsKey(key))
+                throw new AbjadInterpretingException(ErrorMessages.English.NameTaken(key), ErrorMessages.Arabic.NameTaken(key));
 
             local_constants[key] = value;
         }

@@ -1,6 +1,7 @@
 ﻿using ABJAD.Models.Exceptions;
 using ABJAD.ParseEngine;
 using System.Collections.Generic;
+using static ABJAD.Models.Constants;
 
 namespace ABJAD.InterpretEngine
 {
@@ -38,7 +39,10 @@ namespace ABJAD.InterpretEngine
                 }
             }
 
-            throw new AbjadInterpretingException($"No constructor for class {Declaration.Name.Text}.");
+            throw new AbjadInterpretingException(
+                ErrorMessages.English.UnfoundConstructor(Declaration.Name.Text),
+                ErrorMessages.Arabic.UnfoundConstructor(Declaration.Name.Text)
+            );
         }
     }
 }

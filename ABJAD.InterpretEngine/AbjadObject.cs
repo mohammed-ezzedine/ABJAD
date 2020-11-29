@@ -143,7 +143,7 @@ namespace ABJAD.InterpretEngine
             else if (Value as string == Constants.Boolean.False)
                 return new AbjadBool(false);
             else
-                throw new AbjadCastingException("string", "bool");
+                throw new AbjadCastingException(Constants.Types.String, Constants.Types.Bool);
         }
     }
 

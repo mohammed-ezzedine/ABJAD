@@ -1,9 +1,14 @@
-﻿namespace ABJAD.Models.Exceptions
+﻿using static ABJAD.Models.Constants;
+
+namespace ABJAD.Models.Exceptions
 {
     public class AbjadExpectedTokenNotFoundException : AbjadLexingException
     {
         public AbjadExpectedTokenNotFoundException(int line, string token) 
-            : base($"Expected token: '{token}' was not found at line: {line}")
+            : base(
+                  ErrorMessages.English.ExpectedToken(line, token),
+                  ErrorMessages.Arabic.ExpectedToken(line, token)
+            )
         {
         }
     }

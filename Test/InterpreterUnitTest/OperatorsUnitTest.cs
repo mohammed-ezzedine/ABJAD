@@ -30,7 +30,7 @@ namespace InterpreterUnitTest
             var interpreter = new Interpreter(writer);
             interpreter.Interpret(bindings);
 
-            var expectedOutput = "خطأ\nخطأ\nخطأ\nخطأ\nصحيح\nمرحبا بالعالم\n";
+            var expectedOutput = "خطا\nخطا\nخطا\nخطا\nصحيح\nمرحبا بالعالم\n";
             var output = File.ReadAllText(outputPath);
             Assert.AreEqual(expectedOutput, output);
         }

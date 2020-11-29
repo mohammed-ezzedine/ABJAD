@@ -2,7 +2,7 @@
 {
     public class AbjadDivisionByZeroException : AbjadInterpretingException
     {
-        public AbjadDivisionByZeroException() : base(string.Empty)
+        public AbjadDivisionByZeroException() : base(string.Empty, string.Empty)
         {
         }
     }

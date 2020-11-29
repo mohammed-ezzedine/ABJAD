@@ -1,9 +1,14 @@
-﻿namespace ABJAD.Models.Exceptions
+﻿using static ABJAD.Models.Constants;
+
+namespace ABJAD.Models.Exceptions
 {
     public class AbjadNameTakenException : AbjadInterpretingException
     {
         public AbjadNameTakenException(string name) 
-            : base($"Name {name} already exists in the stack.")
+            : base(
+                  ErrorMessages.English.NameTaken(name),
+                  ErrorMessages.Arabic.NameTaken(name)
+            )
         {
         }
     }

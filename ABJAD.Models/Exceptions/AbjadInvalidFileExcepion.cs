@@ -1,8 +1,11 @@
-﻿namespace ABJAD.Models.Exceptions
+﻿using static ABJAD.Models.Constants;
+
+namespace ABJAD.Models.Exceptions
 {
-    public class AbjadInvalidFileExcepion : AbjadExecption
+    public class AbjadInvalidFileExcepion : AbjadException
     {
-        public AbjadInvalidFileExcepion() : base("ABJAD files should have .abjad extention")
+        public AbjadInvalidFileExcepion() 
+            : base(ErrorMessages.English.Extension, ErrorMessages.Arabic.Extension)
         {
         }
     }

@@ -4,6 +4,7 @@ using ABJAD.Models.Exceptions.InterpretingExceptions;
 using ABJAD.ParseEngine;
 using System.Collections.Generic;
 using System.Linq;
+using static ABJAD.Models.Constants;
 using static ABJAD.Models.TokenType;
 
 namespace ABJAD.InterpretEngine
@@ -170,7 +171,7 @@ namespace ABJAD.InterpretEngine
             var classBlock = @class.Declaration.Block as Statement.BlockStmt;
             if (classBlock == null)
             {
-                throw new AbjadInterpretingException("Invalid class block syntax.");
+                throw new AbjadInterpretingException(ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
             }
 
             var parameters = expr.Parameters.Select(p => Evaluate(p)).ToList();
@@ -188,7 +189,7 @@ namespace ABJAD.InterpretEngine
                 case BANG:
                     return operand.OperatorBang();
                 default:
-                    throw new AbjadInterpretingException("Invalid unary expression.");
+                    throw new AbjadInterpretingException(ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
             }
         }
 
@@ -224,7 +225,7 @@ namespace ABJAD.InterpretEngine
                 case TIMES:
                     return oper1.OperatorTimes(oper2);
                 default:
-                    throw new AbjadInterpretingException("Invalid binary expression.");
+                    throw new AbjadInterpretingException(ErrorMessages.English.InvalidSyntax, ErrorMessages.Arabic.InvalidSyntax);
             }
         }
 

@@ -1,8 +1,9 @@
 ﻿namespace ABJAD.Models.Exceptions
 {
-    public class AbjadLexingException : AbjadExecption
+    public class AbjadLexingException : AbjadException
     {
-        public AbjadLexingException(string msg) : base(msg)
+        public AbjadLexingException(string msg_en, string msg_ar) 
+            : base(msg_en, msg_ar)
         {
         }
     }
