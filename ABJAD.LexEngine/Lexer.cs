@@ -13,7 +13,7 @@ namespace ABJAD.LexEngine
         private static readonly string NumberRegex = @"^(0|[1-9][0-9]*)(\.[0-9]*)?$";
         private static readonly string LetterRegex = $"[\u0620-\u063A]|[\u0641-\u064A]";
         private static readonly string LiteralRegex = @$"({LetterRegex})({LetterRegex}|{DigitRegex}|(_))*";
-        private static readonly string WordTerminalRegex = @"[();؛×،{} !@#$%&*-+=.,/\`~'"":\\\[\]\?\^]";
+        private static readonly string WordTerminalRegex = @"[();؛×،{} !<>@#$%&*-+=.,/\`~'"":\\\[\]\?\^]";
         private static readonly string NumberTerminalRegex = @"[();؛×،{} !@#$%&*-+=/\`~'"":\\\[\]\?\^]";
 
         private static readonly Dictionary<string, TokenType> Keywords = new Dictionary<string, TokenType>
@@ -91,6 +91,7 @@ namespace ABJAD.LexEngine
                 case '}': AddToken(CLOSE_BRACE); return;
                 case '(': AddToken(OPEN_PAREN); return;
                 case ')': AddToken(CLOSE_PAREN); return;
+                case '%': AddToken(MODULO); return;
                 case '+':
                     if (Match('+'))
                     {

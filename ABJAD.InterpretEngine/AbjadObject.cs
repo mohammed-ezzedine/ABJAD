@@ -32,6 +32,11 @@ namespace ABJAD.InterpretEngine
             throw new AbjadUnallowedOperatorException("*", Type.ToString(), line, index);
         }
 
+        public virtual AbjadObject OperatorModulo(AbjadObject other, int line, int index)
+        {
+            throw new AbjadUnallowedOperatorException("%", Type.ToString(), line, index);
+        }
+
         public virtual AbjadObject OperatorDiviededBy(AbjadObject other, int line, int index)
         {
             throw new AbjadUnallowedOperatorException("/", Type.ToString(), line, index);
@@ -183,6 +188,11 @@ namespace ABJAD.InterpretEngine
         public override AbjadObject OperatorTimes(AbjadObject other, int line, int index)
         {
             return new AbjadNumber((double)Value * (double)other.Value);
+        }
+
+        public override AbjadObject OperatorModulo(AbjadObject other, int line, int index)
+        {
+            return new AbjadNumber((double)Value % (double)other.Value);
         }
 
         public override AbjadNumber OperatorUMinus(int line, int index)

@@ -47,7 +47,6 @@ namespace ABJAD
             }
             catch (AbjadException e)
             {
-                Console.WriteLine(e.EnglishMessage);
                 writer.Write(e.ArabicMessage);
             }
         }

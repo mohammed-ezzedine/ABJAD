@@ -129,8 +129,9 @@ namespace ABJAD.InterpretEngine
 
                 foreach (var binding in abjadClassBlock.BindingList)
                 {
-                    if (BindingIsFunct(binding, out var funcDecl) &&
-                        funcDecl.Parameters.Count == expr.Parameters.Count)
+                    if (BindingIsFunct(binding, out var funcDecl)
+                        && funcDecl.Name.Text == expr.Func.Text
+                        && funcDecl.Parameters.Count == expr.Parameters.Count)
                     {
                         abjadFunc = new AbjadFunction(funcDecl, abjadClass.Environment);
                     }
@@ -227,6 +228,8 @@ namespace ABJAD.InterpretEngine
                     return oper1.OperatorPlus(oper2, expr.Operation.Line, expr.Operation.Index);
                 case TIMES:
                     return oper1.OperatorTimes(oper2, expr.Operation.Line, expr.Operation.Index);
+                case MODULO:
+                    return oper1.OperatorModulo(oper2, expr.Operation.Line, expr.Operation.Index);
                 default:
                     throw new AbjadInterpretingException(
                         ErrorMessages.English.InvalidSyntax(expr.Operation.Line, expr.Operation.Index), 
@@ -326,7 +329,12 @@ namespace ABJAD.InterpretEngine
             var conditionObj = Evaluate(stmt.Condition) as AbjadBool;
             while ((bool)conditionObj.Value)
             {
-                ExecuteBlock(stmt.Block, environment);
+                var result = ExecuteBlock(stmt.Block, environment);
+                if (result is AbjadReturn)
+                {
+                    return result;
+                }
+
                 conditionObj = Evaluate(stmt.Condition) as AbjadBool;
             }
 
@@ -339,7 +347,12 @@ namespace ABJAD.InterpretEngine
             var conditionObj = Evaluate(stmt.Condition) as AbjadBool;
             while ((bool)conditionObj.Value)
             {
-                ExecuteBlock(stmt.Block, environment);
+                var result = ExecuteBlock(stmt.Block, environment);
+                if (result is AbjadReturn)
+                {
+                    return result;
+                }
+
                 stmt.Assignment.Accept(this);
                 conditionObj = Evaluate(stmt.Condition) as AbjadBool;
             }

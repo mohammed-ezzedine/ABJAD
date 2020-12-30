@@ -405,8 +405,15 @@ namespace ABJAD.ParseEngine
         private Expression Multiplication()
         {
             return LeftPresedenceBinaryOperation(
-                Unary,
+                Modulo,
                 TIMES, DIVIDED_BY);
+        }
+
+        private Expression Modulo()
+        {
+            return LeftPresedenceBinaryOperation(
+                Unary,
+                MODULO);
         }
 
         private Expression LeftPresedenceBinaryOperation(
