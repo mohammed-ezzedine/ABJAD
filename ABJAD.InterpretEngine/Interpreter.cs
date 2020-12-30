@@ -133,7 +133,7 @@ namespace ABJAD.InterpretEngine
                         && funcDecl.Name.Text == expr.Func.Text
                         && funcDecl.Parameters.Count == expr.Parameters.Count)
                     {
-                        abjadFunc = new AbjadFunction(funcDecl, abjadClass.Environment);
+                        abjadFunc = new AbjadFunction(funcDecl, abjadInstance.Environment);
                     }
                 }
             }

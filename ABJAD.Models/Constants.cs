@@ -59,8 +59,8 @@
                 public static string UnexpectedToken(int line, int index, string token)
                     => $"رمز غير متوقع ’{token}‘ في السطر {index} : {line}";
 
-                public static string UnfoundConstructor(string className)
-                    => $"الصنف {className} ليس لديه مُنشئ";
+                public static string UnfoundConstructor(string className, int paramsCount)
+                    => $"الصنف {className} ليس لديه دالة بانية بحيث تأخد ${paramsCount} مُعطيات";
 
                 public static string UnknownClass(string className, int line, int index)
                     => $"الصنف {className} غير معرّف  في السطر {index} : {line}";
@@ -115,8 +115,8 @@
                 public static string UnexpectedToken(int line, int index, string token)
                     => $"Unexpected token '{token}' line {line}:{index}";
 
-                public static string UnfoundConstructor(string className)
-                    => $"Class {className} has no constructor";
+                public static string UnfoundConstructor(string className, int paramsCount)
+                    => $"Class {className} has no constructor that takes ${paramsCount} parameters.";
 
                 public static string UnknownClass(string className, int line, int index)
                     => $"Class with name {className} doesn't exits in the scope at line {line}:{index}";

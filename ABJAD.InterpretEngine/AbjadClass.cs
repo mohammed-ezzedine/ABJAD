@@ -19,29 +19,32 @@ namespace ABJAD.InterpretEngine
 
         public object Instantiate(List<object> parameters)
         {
-            Interpreter.AddClassFieldsAndFunctionsToScope(Declaration, Environment);
-            var constructor = GetConstructor();
+            var instanceEnvironment = Environment.Clone() as Environment;
 
-            var initializer = new AbjadFunction(constructor, Environment);
+            Interpreter.AddClassFieldsAndFunctionsToScope(Declaration, instanceEnvironment);
+            var constructor = GetConstructor(parameters.Count);
+
+            var initializer = new AbjadFunction(constructor, instanceEnvironment);
             initializer.Call(parameters);
 
-            return new AbjadInstance(Environment, Declaration.Name);
+            return new AbjadInstance(instanceEnvironment, Declaration.Name);
         }
 
-        public Declaration.FuncDecl GetConstructor()
+        public Declaration.FuncDecl GetConstructor(int parametersCount)
         {
             foreach (var binding in ((Statement.BlockStmt)Declaration.Block).BindingList)
             {
-                if (Interpreter.BindingIsFunct(binding, out var funcDecl) &&
-                    funcDecl?.Name.Text == Declaration.Name.Text)
+                if (Interpreter.BindingIsFunct(binding, out var funcDecl) 
+                    && funcDecl?.Name.Text == Declaration.Name.Text
+                    && funcDecl?.Parameters.Count == parametersCount)
                 {
                     return funcDecl;
                 }
             }
 
             throw new AbjadInterpretingException(
-                ErrorMessages.English.UnfoundConstructor(Declaration.Name.Text),
-                ErrorMessages.Arabic.UnfoundConstructor(Declaration.Name.Text)
+                ErrorMessages.English.UnfoundConstructor(Declaration.Name.Text, parametersCount),
+                ErrorMessages.Arabic.UnfoundConstructor(Declaration.Name.Text, parametersCount)
             );
         }
     }
