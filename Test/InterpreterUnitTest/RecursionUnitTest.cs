@@ -26,7 +26,7 @@ namespace InterpreterUnitTest
             var parser = new Parser(tokens);
             var bindings = parser.Parse();
 
-            var writer = new Writer(outputPath);
+            var writer = new FileWriter(outputPath);
             var interpreter = new Interpreter(writer);
             interpreter.Interpret(bindings);
 
@@ -52,7 +52,7 @@ namespace InterpreterUnitTest
             var parser = new Parser(tokens);
             var bindings = parser.Parse();
 
-            var writer = new Writer(outputPath);
+            var writer = new FileWriter(outputPath);
             var interpreter = new Interpreter(writer);
             interpreter.Interpret(bindings);
 
@@ -78,7 +78,7 @@ namespace InterpreterUnitTest
             var parser = new Parser(tokens);
             var bindings = parser.Parse();
 
-            var writer = new Writer(outputPath);
+            var writer = new FileWriter(outputPath);
             var interpreter = new Interpreter(writer);
             interpreter.Interpret(bindings);
 
