@@ -2,10 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <Title>Arabic Programming Language</Title>
+    <Description>ABJAD is an Arabic scripting programming language, which means that it requires the minimal amount of code to start a program.</Description>
+    <PackageProjectUrl>https://mohammed.ezzedine.me/abjad</PackageProjectUrl>
+    <PackageIcon>abjad-800.png</PackageIcon>
+    <RepositoryUrl>https://github.com/mezdn/ABJAD</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ABJAD.Models\ABJAD.Models.csproj" />
+    <None Include="..\LICENSE.md" Pack="true" PackagePath="" />
+    <None Include="..\assets\abjad-800.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>

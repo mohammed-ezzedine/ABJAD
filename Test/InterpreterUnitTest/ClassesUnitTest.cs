@@ -36,7 +36,7 @@ namespace InterpreterUnitTest
             var parser = new Parser(tokens);
             var bindings = parser.Parse();
 
-            var writer = new Writer(null, null, true);
+            var writer = new FileWriter(null, null, true);
             var interpreter = new Interpreter(writer);
 
             Assert.DoesNotThrow(new TestDelegate(() =>
@@ -74,7 +74,7 @@ namespace InterpreterUnitTest
             var parser = new Parser(tokens);
             var bindings = parser.Parse();
 
-            var writer = new Writer(null, null, true);
+            var writer = new FileWriter(null, null, true);
             var interpreter = new Interpreter(writer);
             interpreter.Interpret(bindings);
 
@@ -114,7 +114,7 @@ namespace InterpreterUnitTest
             var parser = new Parser(tokens);
             var bindings = parser.Parse();
 
-            var writer = new Writer(null, null, true);
+            var writer = new FileWriter(null, null, true);
             var interpreter = new Interpreter(writer);
             interpreter.Interpret(bindings);
 

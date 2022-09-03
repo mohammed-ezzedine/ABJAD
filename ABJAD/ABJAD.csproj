@@ -1,16 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Product>ABJAD</Product>
-    <PackageId>ABJAD</PackageId>
-    <AssemblyName>abjad</AssemblyName>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <Title>Arabic Programming Language</Title>
+    <Description>ABJAD is an Arabic scripting programming language, which means that it requires the minimal amount of code to start a program.</Description>
+    <PackageProjectUrl>https://mohammed.ezzedine.me/abjad</PackageProjectUrl>
+    <PackageIcon>abjad-800.png</PackageIcon>
+    <RepositoryUrl>https://github.com/mezdn/ABJAD</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.8.0" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ABJAD.InterpretEngine\ABJAD.InterpretEngine.csproj" />
@@ -18,6 +17,8 @@
     <ProjectReference Include="..\ABJAD.LexEngine\ABJAD.LexEngine.csproj" />
     <ProjectReference Include="..\ABJAD.Models\ABJAD.Models.csproj" />
     <ProjectReference Include="..\ABJAD.ParseEngine\ABJAD.ParseEngine.csproj" />
+    <None Include="..\LICENSE.md" Pack="true" PackagePath="" />
+    <None Include="..\assets\abjad-800.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>

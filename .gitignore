@@ -4,3 +4,4 @@ bin/
 Program/
 obj/
 Test/*.txt
+.idea/

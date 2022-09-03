@@ -19,19 +19,19 @@ namespace ABJAD.InterpretEngine
     {
         private Environment environment;
 
-        public Interpreter(Writer writer, Environment environment, bool referenceScope = false)
+        public Interpreter(Writer fileWriter, Environment environment, bool referenceScope = false)
         {
             this.environment = referenceScope ? environment : environment.Clone() as Environment;
-            Writer = writer;
+            FileWriter = fileWriter;
         }
 
-        public Interpreter(Writer writer)
+        public Interpreter(Writer fileWriter)
         {
             environment = new Environment();
-            Writer = writer;
+            FileWriter = fileWriter;
         }
 
-        public static Writer Writer { get; set; }
+        public static Writer FileWriter { get; set; }
 
         public void Interpret(List<Binding> bindings)
         {
@@ -377,13 +377,13 @@ namespace ABJAD.InterpretEngine
         {
             var val = Evaluate(stmt.Expr) as AbjadObject;
             var edited = val == null? "عدم" : val.ToStr(-1, -1).Value as string;
-            Writer.Write(edited);
+            FileWriter.Write(edited);
             return null;
         }
 
         public static object ExecuteBlock(Statement.BlockStmt block, Environment env)
         {
-            var localInterpret = new Interpreter(Writer, env);
+            var localInterpret = new Interpreter(FileWriter, env);
             foreach (var binding in block.BindingList)
             {
                 var result = binding.Accept(localInterpret);
@@ -415,7 +415,7 @@ namespace ABJAD.InterpretEngine
 
         public static void AddClassFieldsAndFunctionsToScope(Declaration.ClassDecl @class, Environment scope)
         {
-            var localInterpreter = new Interpreter(Writer, scope, true);
+            var localInterpreter = new Interpreter(FileWriter, scope, true);
             foreach (var binding in ((Statement.BlockStmt)@class.Block).BindingList)
             {
                 if (!BindingIsFunct(binding, out var funcDecl) ||
